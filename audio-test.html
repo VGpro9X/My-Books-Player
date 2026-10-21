@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#17141a">
+<title>My Books Player — Audio Test v0.1</title>
+<style>
+:root{color-scheme:dark;--bg:#141217;--card:#242029;--soft:#302c35;--ink:#f6f2f5;--muted:#aaa2af;--line:#423c46;--pink:#f03468;--green:#76e6b2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}header{padding:18px max(20px,calc((100vw - 1020px)/2));display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line)}.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#ee285f,#8c1c80);font-size:24px}header h1{font-size:19px;margin:0;line-height:1.2}header p{font-size:12px;margin:3px 0 0;color:var(--muted)}main{max-width:1020px;margin:auto;padding:20px 18px 90px}.top{display:grid;gap:12px;grid-template-columns:1.4fr 1fr}.box{border-radius:16px;border:1px solid var(--line);background:var(--card);padding:20px}.hero{background:radial-gradient(circle at top right,#5d2145,transparent 58%),var(--card)}h2{font-size:22px;line-height:1.25;margin:0 0 12px}h3{font-size:16px;margin:0 0 12px}p{margin:8px 0;color:var(--muted)}.notice{font-size:13px;line-height:1.5}.notice strong{color:var(--ink)}.tag{display:inline-flex;color:#ffcbd8;background:#702541;border-radius:50px;padding:3px 10px;font-weight:700;font-size:11px;letter-spacing:.4px;margin-bottom:10px}.tabs{display:flex;gap:8px;margin:20px 0 12px}.tabs button{border:1px solid var(--line);border-radius:10px;background:var(--soft);color:var(--muted);padding:10px 14px;flex:1;font-weight:700}.tabs button.active{background:var(--pink);color:white;border-color:var(--pink)}.pane{display:none}.pane.active{display:block}.toolrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:12px 0}.btn{border:1px solid var(--line);background:var(--soft);color:var(--ink);padding:10px 14px;border-radius:11px;font-weight:700}.btn.primary{background:var(--pink);border-color:var(--pink);color:#fff}.btn:focus-visible,.tabs button:focus-visible{outline:3px solid var(--green);outline-offset:2px}select,input[type=file]{max-width:100%;background:var(--soft);color:var(--ink);padding:10px;border:1px solid var(--line);border-radius:9px}.file-label{font-weight:600}.text{max-height:410px;overflow:auto;padding:18px;border:1px solid var(--line);background:#1b1820;border-radius:12px;white-space:pre-wrap;line-height:1.95;font-size:17px}.part{transition:background .18s}.part.reading{background:#f7cb49;color:#251a11;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}#ttsStatus,#mp3Status{border:1px solid var(--line);background:#1c1920;border-radius:10px;padding:9px 12px;color:var(--green);min-height:44px;font-size:13px}.help{color:var(--muted);font-size:13px}audio{display:block;width:100%;margin:16px 0}.footer{margin:30px 0;color:var(--muted);font-size:12px;text-align:center}label{font-size:13px;font-weight:600}strong{color:var(--ink)}.steps{margin:10px 0;padding-left:22px;color:var(--muted)}.steps li{margin:6px 0}.line{height:1px;background:var(--line);margin:17px 0}.small{font-size:12px;color:var(--muted)}.clip{max-height:190px;overflow:auto}.meter{display:flex;gap:10px;flex-wrap:wrap}.chip{border:1px solid var(--line);background:#17141b;color:var(--muted);font-size:12px;padding:5px 8px;border-radius:7px}
+@media(max-width:680px){.top{grid-template-columns:1fr}main{padding:14px 12px 80px}header{padding:14px 12px}.box{padding:15px}h2{font-size:20px}.tabs button{font-size:12px;padding:10px 6px}.text{font-size:17px;max-height:48vh}.toolrow{gap:8px}}
+</style>
+</head>
+<body>
+<header><div class="logo" aria-hidden="true">♫</div><div><h1>My Books Player</h1><p>Kiểm thử Audio miễn phí · v0.1</p></div></header>
+<main>
+<section class="top">
+ <div class="box hero"><div class="tag">BẢN THỬ NGHIỆM 01</div><h2>Nghe truyện trên Android</h2><p>Kiểm tra giọng đọc tiếng Việt miễn phí và khả năng phát âm thanh khi điện thoại khóa màn hình.</p><div class="meter"><span class="chip">Không tài khoản</span><span class="chip">Không API trả phí</span><span class="chip">Không upload lên server</span></div></div>
+ <div class="box"><h3>Hai phép thử độc lập</h3><p class="notice"><strong>1. TTS hệ thống:</strong> miễn phí, đọc văn bản trực tiếp; có thể dừng khi khóa màn hình.</p><p class="notice"><strong>2. File MP3/WAV:</strong> dùng thẻ audio thật để kiểm tra phát nền, điều khiển màn hình khóa.</p></div>
+</section>
+
+<div class="tabs" role="tablist" aria-label="Chế độ phát">
+ <button id="tabTts" role="tab" aria-selected="true" aria-controls="ttsPane" class="active">🔊 TTS mặc định</button>
+ <button id="tabMp3" role="tab" aria-selected="false" aria-controls="mp3Pane">🎧 Audio khóa màn hình</button>
+</div>
+
+<section id="ttsPane" class="pane active box" role="tabpanel" aria-labelledby="tabTts">
+ <h3>Đọc văn bản bằng giọng tiếng Việt trên máy</h3>
+ <p class="help">Giọng đọc sẽ tùy theo các giọng TTS đang có trên Android/Chrome. Bản thử này không tạo MP3 và không gửi văn bản đến máy chủ của My Books Player.</p>
+ <div class="toolrow"><label for="txtFile">Mở tệp TXT:</label><input id="txtFile" type="file" accept=".txt,text/plain"><button class="btn" id="resetText">Dùng truyện mẫu</button></div>
+ <div class="toolrow"><label for="voice">Giọng:</label><select id="voice" aria-label="Chọn giọng"><option>Đang tìm giọng...</option></select><label for="rate">Tốc độ:</label><select id="rate"><option value="0.8">0.8×</option><option selected value="1">1.0×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option><option value="2">2.0×</option></select></div>
+ <div class="toolrow"><button id="speak" class="btn primary">▶ Đọc</button><button id="pause" class="btn">⏸ Tạm dừng</button><button id="stop" class="btn">■ Dừng</button><button id="next" class="btn">⏭ Đoạn sau</button></div>
+ <div id="ttsStatus" role="status">Sẵn sàng. Chạm Đọc để bắt đầu.</div>
+ <div class="line"></div><h3>Nội dung đang đọc</h3><div class="text" id="textView" aria-live="off"></div>
+ <p class="small">Highlight ở bản thử là theo đoạn/câu, không phải từng từ. File TXT chỉ xử lý cục bộ trong trình duyệt, giới hạn 30.000 ký tự để thử nghiệm.</p>
+</section>
+
+<section id="mp3Pane" class="pane box" role="tabpanel" aria-labelledby="tabMp3">
+ <h3>Thử phát khi Android khóa màn hình</h3>
+ <p class="help">Chọn một file MP3 hoặc WAV có sẵn trên máy. File chỉ được mở trong trình duyệt, <strong>không upload lên server</strong>. Bạn cũng có thể tạo âm thanh tiếng bíp miễn phí để thử mà không cần file.</p>
+ <div class="toolrow"><input id="audioFile" type="file" accept="audio/*,.mp3,.m4a,.wav,.ogg,.opus"><button id="generate" class="btn">♫ Tạo âm thanh thử 60 giây</button></div>
+ <audio id="audio" controls preload="metadata"></audio>
+ <div class="toolrow"><label for="mp3Rate">Tốc độ:</label><select id="mp3Rate"><option value="0.8">0.8×</option><option selected value="1">1.0×</option><option value="1.2">1.2×</option><option value="1.5">1.5×</option><option value="2">2.0×</option></select><button id="back15" class="btn">↺ 15 giây</button><button id="forward15" class="btn">15 giây ↻</button><label><input type="checkbox" id="repeat" checked> Lặp lại</label></div>
+ <div id="mp3Status" role="status">Chọn audio hoặc tạo đoạn âm thử, sau đó bấm Play.</div>
+ <div class="line"></div><h3>Các bước kiểm tra</h3>
+ <ol class="steps"><li>Bấm Play bằng thao tác chạm trực tiếp.</li><li>Khóa màn hình Android và đợi ít nhất 5 phút.</li><li>Kiểm tra âm thanh còn chạy và có nút Play/Pause trên màn hình khóa không.</li><li>Mở ứng dụng khác rồi thử lại; sau đó thử tối thiểu 30 phút.</li></ol>
+ <p class="small">Âm thử chỉ là tiếng bíp, không phải giọng TTS. Kết quả phát file audio không chứng minh TTS trình duyệt sẽ tiếp tục đọc khi khóa màn hình.</p>
+</section>
+
+<p class="footer">My Books Player · Demo miễn phí · Chưa lưu thư viện hay đồng bộ đám mây</p>
+</main>
+<script>
+(() => {
+"use strict";
+const byId=(id)=>document.getElementById(id);
+const SAMPLE="Chương Một: Bắt Đầu Hành Trình.\n\nBuổi sáng, những tia nắng đầu tiên xuyên qua cửa sổ. Thành phố vẫn yên bình, nhưng một cuộc phiêu lưu mới đã sắp bắt đầu.\n\nMinh mở cuốn sách cũ. Giữa những trang giấy ố vàng là một tấm bản đồ bí ẩn, dẫn đến nơi mà chưa ai từng đặt chân tới.\n\nCậu hít một hơi thật sâu, mỉm cười và nói: Hôm nay, mình sẽ khám phá điều bí mật ấy.\n\nGió thổi qua tán cây, mang theo tiếng chim hót. Từng bước chân đưa Minh đi xa hơn khỏi con phố quen thuộc.";
+let sections=[], pos=0, voiceList=[], speaking=false, stopped=true, paused=false, run=0, objectUrl=null;
+const engine=window.speechSynthesis;
+function splitText(value){return (value.match(/[^.!?…\n]+(?:[.!?…]+|$)|\n+/g)||[]).map(s=>s.trim()).filter(Boolean).flatMap(s=>{if(s.length<220)return[s];const a=[];for(let i=0;i<s.length;i+=180)a.push(s.slice(i,i+180));return a;});}
+function render(){const el=byId("textView");el.replaceChildren();sections.forEach((s,i)=>{const span=document.createElement("span");span.className="part"+(i===pos?" reading":"");span.textContent=s+" ";span.dataset.i=String(i);el.append(span);});}
+function highlight(){const arr=byId("textView").querySelectorAll(".part");arr.forEach((x,i)=>x.classList.toggle("reading",i===pos));if(arr[pos])arr[pos].scrollIntoView({block:"nearest",behavior:"smooth"});}
+function status(msg){byId("ttsStatus").textContent=msg;}
+function resetVoice(){const sel=byId("voice"),prev=sel.value;voiceList=engine?engine.getVoices():[];sel.replaceChildren();const vi=voiceList.filter(v=>v.lang.toLowerCase().startsWith("vi"));const available=vi.length?vi:voiceList; if(!available.length){const o=document.createElement("option");o.textContent="Trình duyệt chưa cung cấp danh sách giọng";o.value="";sel.add(o);} else {available.forEach(v=>{const o=document.createElement("option");o.value=v.voiceURI;o.textContent=v.name+" ("+v.lang+")";sel.add(o);});if(available.some(v=>v.voiceURI===prev))sel.value=prev;}if(!vi.length)status("Không phát hiện giọng tiếng Việt. Kiểm tra cài đặt TTS của Android; giọng khác có thể đọc tiếng Việt không chuẩn.");}
+function setText(content){stopTts();sections=splitText(content.slice(0,30000));pos=0;render();status("Đã tải "+sections.length+" đoạn. Chạm Đọc để thử.");}
+function stopTts(){run++;stopped=true;speaking=false;paused=false;if(engine){engine.cancel();}byId("pause").textContent="⏸ Tạm dừng";}
+function sayNext(token){if(stopped||token!==run)return;if(pos>=sections.length){stopped=true;speaking=false;status("Đã đọc hết nội dung mẫu.");return;}highlight();const item=new SpeechSynthesisUtterance(sections[pos]);item.lang="vi-VN";item.rate=Number(byId("rate").value)||1;const v=voiceList.find(x=>x.voiceURI===byId("voice").value);if(v)item.voice=v;item.onstart=()=>{if(token!==run)return;speaking=true;status("Đang đọc đoạn "+(pos+1)+"/"+sections.length);};item.onend=()=>{if(stopped||token!==run)return;pos++;sayNext(token);};item.onerror=(e)=>{if(stopped||token!==run)return;stopped=true;speaking=false;status("TTS bị dừng: "+e.error+". Có thể do trình duyệt hoặc chế độ chạy nền.");};engine.speak(item);}
+function startTts(){if(!engine){status("Trình duyệt này không hỗ trợ Web Speech API.");return;}if(!sections.length)return;stopTts();stopped=false;speaking=true;const token=run;setTimeout(()=>{if(token===run)sayNext(token);},70);}
+byId("speak").onclick=()=>{byId("audio").pause();startTts();};
+byId("pause").onclick=()=>{if(!engine||stopped)return;if(paused){engine.resume();paused=false;byId("pause").textContent="⏸ Tạm dừng";status("Tiếp tục đọc.");}else{engine.pause();paused=true;byId("pause").textContent="▶ Tiếp tục";status("TTS đang tạm dừng.");}};
+byId("stop").onclick=()=>{stopTts();status("Đã dừng. Chạm Đọc để bắt đầu lại.");};
+byId("next").onclick=()=>{if(!sections.length)return;pos=(pos+1)%sections.length;highlight();if(!stopped)startTts();else status("Đã chuyển tới đoạn "+(pos+1));};
+byId("resetText").onclick=()=>setText(SAMPLE);
+byId("txtFile").onchange=async(e)=>{const file=e.target.files?.[0];if(!file)return;try{setText(await file.text());}catch{status("Không đọc được file TXT.");}};
+if(engine){resetVoice();engine.onvoiceschanged=resetVoice;}else status("Thiết bị không hỗ trợ Web Speech API.");
+setText(SAMPLE);
+const audio=byId("audio");
+function mp3Status(s){byId("mp3Status").textContent=s;}
+function setMedia(title,src){if(objectUrl)URL.revokeObjectURL(objectUrl);objectUrl=src;audio.pause();audio.src=src;audio.loop=byId("repeat").checked;audio.playbackRate=Number(byId("mp3Rate").value);mp3Status("Đã nạp: "+title+". Chạm Play để bắt đầu.");if("mediaSession" in navigator){navigator.mediaSession.metadata=new MediaMetadata({title,artist:"My Books Player · Audio Test",album:"Thử phát nền Android"});navigator.mediaSession.setActionHandler("play",()=>audio.play().catch(()=>{}));navigator.mediaSession.setActionHandler("pause",()=>audio.pause());navigator.mediaSession.setActionHandler("seekbackward",d=>audio.currentTime=Math.max(0,audio.currentTime-(d.seekOffset||15)));navigator.mediaSession.setActionHandler("seekforward",d=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+(d.seekOffset||15)));navigator.mediaSession.setActionHandler("seekto",d=>{if(typeof d.seekTime==="number")audio.currentTime=d.seekTime;});}}
+byId("audioFile").onchange=e=>{const f=e.target.files?.[0];if(!f)return;setMedia(f.name,URL.createObjectURL(f));};
+function createWav(){const sampleRate=8000,seconds=60,count=sampleRate*seconds,buffer=new ArrayBuffer(44+count*2),v=new DataView(buffer);function txt(o,s){for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}txt(0,"RIFF");v.setUint32(4,36+count*2,true);txt(8,"WAVE");txt(12,"fmt ");v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sampleRate,true);v.setUint32(28,sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);txt(36,"data");v.setUint32(40,count*2,true);for(let i=0;i<count;i++){const t=i/sampleRate,beat=t%2.5,active=beat<.35,env=active?Math.sin(Math.PI*beat/.35):0,frequency=Math.floor(t/5)%2===0?440:523,value=active?Math.sin(2*Math.PI*frequency*t)*env*.20:0;v.setInt16(44+2*i,Math.round(value*32767),true);}return new Blob([buffer],{type:"audio/wav"});}
+byId("generate").onclick=()=>{const url=URL.createObjectURL(createWav());setMedia("Âm thử khóa màn hình — vòng 60 giây",url);};
+byId("mp3Rate").onchange=e=>audio.playbackRate=Number(e.target.value);
+byId("back15").onclick=()=>audio.currentTime=Math.max(0,audio.currentTime-15);
+byId("forward15").onclick=()=>audio.currentTime=Math.min(audio.duration||Infinity,audio.currentTime+15);
+byId("repeat").onchange=e=>audio.loop=e.target.checked;
+audio.onplay=()=>{stopTts();mp3Status("Đang phát audio. Hãy khóa màn hình và kiểm tra.");if("mediaSession" in navigator)navigator.mediaSession.playbackState="playing";};
+audio.onpause=()=>{if("mediaSession" in navigator)navigator.mediaSession.playbackState="paused";if(!audio.ended)mp3Status("Đã tạm dừng audio.");};
+audio.onerror=()=>mp3Status("Không phát được file này. Hãy thử MP3 hoặc tạo âm thử.");
+audio.ontimeupdate=()=>{if(!("mediaSession" in navigator)||!navigator.mediaSession.setPositionState||!Number.isFinite(audio.duration))return;try{navigator.mediaSession.setPositionState({duration:audio.duration,playbackRate:audio.playbackRate,position:audio.currentTime});}catch{}};
+function tab(mode){const tts=mode==="tts";byId("ttsPane").classList.toggle("active",tts);byId("mp3Pane").classList.toggle("active",!tts);byId("tabTts").classList.toggle("active",tts);byId("tabMp3").classList.toggle("active",!tts);byId("tabTts").setAttribute("aria-selected",String(tts));byId("tabMp3").setAttribute("aria-selected",String(!tts));}
+byId("tabTts").onclick=()=>{audio.pause();tab("tts");};
+byId("tabMp3").onclick=()=>{stopTts();tab("mp3");};
+window.addEventListener("pagehide",()=>{if(engine)engine.cancel();});
+})();
+</script>
+</body>
+</html>
