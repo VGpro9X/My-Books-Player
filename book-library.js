@@ -83,7 +83,7 @@ function mapRow(row){
 }
 async function refresh(){
  const u=user(),sb=db();
- if(!u||!sb){records=[];uid=null;parsedCache.clear();window.mbpApp?.setRealBooks([],{});return;}
+ if(!u||!sb){records=[];uid=null;parsedCache.clear();savingTimers.forEach(clearTimeout);savingTimers.clear();pendingPositions.clear();window.mbpApp?.setRealBooks([],{});return;}
  if(uid!==u.id){uid=u.id;records=[];parsedCache.clear();}
  const ownerId=u.id;
  const [b,p]=await Promise.all([
@@ -105,14 +105,27 @@ async function syncProgress(bookId,chapter,para,expectedUid){
  },{onConflict:"owner_id,book_id"});
  if(error)throw error;
 }
+const pendingPositions=new Map();
+async function flushPosition(bookId){
+ const value=pendingPositions.get(bookId);
+ if(!value)return;
+ pendingPositions.delete(bookId);
+ if(savingTimers.has(bookId)){clearTimeout(savingTimers.get(bookId));savingTimers.delete(bookId);}
+ try{await syncProgress(bookId,value.chapter,value.para,value.userId);}
+ catch(e){
+  pendingPositions.set(bookId,value);
+  msg("Lỗi đồng bộ vị trí: "+(e.message||e));
+  window.mbpApp?.notify?.("Chưa đồng bộ được vị trí sách này. Thử Đồng bộ ngay.");
+  throw e;
+ }
+}
 window.mbpSaveRealProgress=(bookId,chapter,para)=>{
  const u=user();if(!u)return;
+ pendingPositions.set(bookId,{chapter,para,userId:u.id});
  if(savingTimers.has(bookId))clearTimeout(savingTimers.get(bookId));
- savingTimers.set(bookId,setTimeout(async()=>{
-  savingTimers.delete(bookId);
-  try{await syncProgress(bookId,chapter,para,u.id);}catch(e){msg("Lỗi lưu vị trí: "+(e.message||e));window.mbpApp?.notify?.("Chưa đồng bộ được vị trí sách này. Kiểm tra kết nối.");}
- },550));
+ savingTimers.set(bookId,setTimeout(()=>flushPosition(bookId).catch(()=>{}),500));
 };
+window.mbpFlushRealProgress=async()=>{await Promise.all([...pendingPositions.keys()].map(flushPosition));};
 window.mbpLoadRealBook=async b=>{
  const sb=db(),u=user();if(!sb||!u)throw Error("Cần đăng nhập để đọc sách riêng tư.");
  const row=records.find(r=>r.id===b.id&&r.owner_id===u.id);
