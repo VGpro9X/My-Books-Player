@@ -130,8 +130,22 @@ function chapterTitle(n){return "Chương "+n+": "+chapterNames[(n-1)%chapterNam
 function stopSpeech(){ttsGeneration++;if(synth)synth.cancel();ttsPlaying=false;ttsPaused=false;syncPlayer();}
 function syncPlayer(){var btn=$("miniToggle");btn.textContent=ttsPlaying&&!ttsPaused?"Ⅱ":"▶";btn.setAttribute("aria-label",ttsPlaying&&!ttsPaused?"Tạm dừng giọng đọc":"Phát giọng đọc");$("miniState").textContent=ttsPlaying?(ttsPaused?"Đang tạm dừng":"TTS trình duyệt · có thể dừng khi khóa màn hình"):"Nhấn ▶ để nghe giọng mặc định"; }
 function renderReader(resetScroll){if(!readerBook)return;var b=readerBook,p=progress[b.id]||{chapter:1,para:0};$("readerTitle").textContent=b.name;$("readerProgress").textContent="Chương "+p.chapter+" / "+b.total;$("readingPage").innerHTML='<h1>'+chapterTitle(p.chapter)+'</h1>'+paragraphs.map(function(text,i){return '<p data-para="'+i+'"'+(p.para===i?' class="highlight"':'')+'>'+text+'</p>';}).join("");$("prevChapter").disabled=p.chapter<=1;$("nextChapter").disabled=p.chapter>=b.total;$("miniTitle").textContent=b.name+" · Chương "+p.chapter;if(resetScroll)$("readerScroll").scrollTop=0;}
+function restoreMarkedParagraph(bookId,chapter,para){
+ // Restore only an explicitly marked paragraph, not an assumed scroll position.
+ var index=Number(para);
+ if(!Number.isInteger(index)||index<=0||index>=paragraphs.length)return;
+ requestAnimationFrame(function(){requestAnimationFrame(function(){
+  if(!readerBook||readerBook.id!==bookId||$("reader").hidden)return;
+  var current=progress[bookId];
+  if(!current||current.chapter!==chapter||Number(current.para)!==index)return;
+  var scroller=$("readerScroll"),target=$("readingPage").querySelector('p[data-para="'+index+'"]');
+  if(!target)return;
+  var relativeTop=target.getBoundingClientRect().top-scroller.getBoundingClientRect().top;
+  scroller.scrollTop=Math.max(0,scroller.scrollTop+relativeTop-Math.min(90,scroller.clientHeight*.15));
+ });});
+}
 function savePosition(chapter,para){progress[readerBook.id]={chapter:chapter,para:para};save("mbp_demo_progress",progress);renderReader(false);}
-function openReader(id){var b=bookById(id);if(!b)return;closeLibrary();stopSpeech();readerBook=b;if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};save("mbp_demo_progress",progress);}var p=progress[b.id];ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";applyPrefs();renderReader(true);syncPlayer();}
+function openReader(id){var b=bookById(id);if(!b)return;closeLibrary();stopSpeech();readerBook=b;if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};save("mbp_demo_progress",progress);}var p=progress[b.id];ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";applyPrefs();renderReader(true);restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();}
 function closeReader(){stopSpeech();readerBook=null;$("reader").hidden=true;$("miniPlayer").classList.remove("visible");closeDrawer();document.body.style.overflow="";renderHome();}
 function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);}
 function markPara(i){if(!readerBook)return;var p=progress[readerBook.id];p.para=i;save("mbp_demo_progress",progress);document.querySelectorAll("#readingPage p").forEach(function(x){x.classList.toggle("highlight",Number(x.dataset.para)===i);});}
