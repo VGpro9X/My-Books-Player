@@ -83,7 +83,7 @@ function mapRow(row){
 }
 async function refresh(){
  const u=user(),sb=db();
- if(!u||!sb){records=[];uid=null;parsedCache.clear();savingTimers.forEach(clearTimeout);savingTimers.clear();pendingPositions.clear();window.mbpApp?.setRealBooks([],{});return;}
+ if(!u||!sb){records=[];uid=null;parsedCache.clear();savingTimers.forEach(clearTimeout);savingTimers.clear();pendingPositions.clear();window.mbpApp?.closePrivateReader?.();window.mbpApp?.setRealBooks([],{});return;}
  if(uid!==u.id){uid=u.id;records=[];parsedCache.clear();}
  const ownerId=u.id;
  const [b,p]=await Promise.all([
