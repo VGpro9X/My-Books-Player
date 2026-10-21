@@ -111,6 +111,7 @@ $("cloudSignIn").onclick=()=>guarded(async()=>{
  message("Đã đăng nhập. Đang tải dữ liệu cloud…");
 });
 $("cloudSignOut").onclick=()=>guarded(async()=>{
+ await window.mbpFlushRealProgress?.();
  const {error}=await client.auth.signOut();if(error)throw error;
  message("Đã đăng xuất. Dữ liệu cloud vẫn ở tài khoản; bản sao demo trên thiết bị vẫn còn.");
 });
