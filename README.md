@@ -1,23 +1,27 @@
 # My Books Player
 
-Ứng dụng web đọc truyện cá nhân — đang phát triển theo từng mốc và được người dùng kiểm thử sau mỗi lần deploy.
+Website đọc sách cá nhân, ưu tiên Chrome Android.
 
-- URL: https://vgpro9x.github.io/My-Books-Player/
-- Trang thử audio đã nghiệm thu trước đó: https://vgpro9x.github.io/My-Books-Player/audio-test.html
+**URL dùng thử:** https://vgpro9x.github.io/My-Books-Player/?v=0.4.0
 
-## v0.2 — Mốc giao diện (chờ người dùng test)
+## v0.4 — Nhập TXT / EPUB thật (chờ người dùng nghiệm thu)
+- Đăng nhập bằng biểu tượng ☁ với tài khoản Supabase đã có.
+- Chạm **＋ Thêm sách**, chọn `.txt` hoặc `.epub` tối đa **20 MB**.
+- Ứng dụng nhận diện tên/tác giả (cho phép sửa), tách chương và trích xuất nội dung.
+- File gốc lưu trong Supabase Storage bucket riêng tư theo tài khoản; **không** đưa lên GitHub.
+- Sách thật xuất hiện trong thư viện và bộ lọc **Sách của tôi**; có nút xóa sách thử.
+- Reader đọc nội dung thật, mục lục, chuyển chương, đánh dấu vị trí và TTS trình duyệt.
+- Tiến độ sách thật lưu trong bảng `reading_progress` và đồng bộ khi đăng nhập cùng tài khoản.
 
-- Trang chủ, banner nổi bật, sách đọc dở, grid sách và tìm kiếm.
-- Tủ sách dạng popup với các tab Đang đọc, Đã lưu, Bộ sưu tập (tab bộ sưu tập chưa có chức năng).
-- Reader toàn màn hình: chương, lật chương, font, cỡ chữ, giãn dòng, màu nền, đánh dấu vị trí và TTS mặc định.
-- Responsive, tối ưu thiết bị Android, thanh điều hướng di động.
-- Dữ liệu sách demo; cài đặt và vị trí chỉ lưu trong localStorage của trình duyệt này.
-- Audio Test v0.1 giữ riêng ở /audio-test.html.
+## Đã nghiệm thu
+- v0.1 Audio Test (https://vgpro9x.github.io/My-Books-Player/audio-test.html)
+- v0.2 UI + sửa lỗi khôi phục đoạn
+- v0.3 Supabase Cloud: người dùng xác nhận 6/6
 
-**Quan trọng:** Chưa có kho lưu trữ thật, tài khoản, cloud hoặc đồng bộ thiết bị. TTS tích hợp reader chỉ để thử; tính năng phát nền được kiểm tra riêng ở trang audio-test.html. Sách demo và văn bản demo không phải sách người dùng upload.
+## Giới hạn
+- EPUB DRM, ảnh, bảng, CSS và chú thích chưa hiển thị đầy đủ (chỉ trích xuất văn bản).
+- Bìa sách đang hiển thị bìa phong cách mặc định, chưa trích xuất ảnh bìa từ EPUB.
+- Offline/cache, xử lý xung đột hai thiết bị và TTS phát nền ổn định là các bước tiếp theo.
+- Không sử dụng dịch vụ TTS trả phí hoặc Android APK.
 
-## Thứ tự bước
-Xem PLAN.md, CHANGELOG.md và TESTING.md. **Không chuyển bước nếu người dùng chưa xác nhận kết quả test.**
-
-## Quy tắc TTS tương lai
-Xem VOICE_INTEGRATION.md. Người dùng sẽ cung cấp giọng sau, không mua API TTS. Định dạng giọng có thể là model + config hoặc tài liệu endpoint; không buộc chuyển định dạng trước.
+Xem [TESTING.md](TESTING.md), [PLAN.md](PLAN.md), [CHANGELOG.md](CHANGELOG.md) và [VOICE_INTEGRATION.md](VOICE_INTEGRATION.md).
