@@ -1,6 +1,18 @@
 # Changelog
 
-## v0.3.0 — Step 03 Supabase Cloud & Auth (chờ nghiệm thu)
+## v0.4.0 — TXT/EPUB riêng tư (CHỜ BẠN TEST)
+- Upload TXT/EPUB thật tối đa 20MB bằng tài khoản Supabase, metadata tự nhận diện và cho phép sửa.
+- File gốc lưu riêng tư trong Supabase Storage, thông tin sách trong public.books có RLS.
+- Đọc nội dung thật, mục lục theo chương, đánh dấu tiến độ trong reading_progress, nghe TTS trình duyệt.
+- Có danh sách Sách của tôi, xóa sách thử, có thể mở lại bằng tài khoản trên thiết bị khác.
+- Trích xuất văn bản EPUB nhưng chưa hiển thị ảnh/bảng/CSS/DRM. Bìa tạm là bìa phong cách mặc định.
+- Chưa có offline, giải quyết xung đột nhiều thiết bị hay giọng người dùng cung cấp.
+- Kiểm thử Chromium TXT/EPUB + Reader đã đạt; Android thực tế chưa nghiệm thu.
+
+## v0.3.0 — Đã nghiệm thu
+- Người dùng xác nhận 6/6 mục đăng nhập, đồng bộ Cloud đạt.
+
+## v0.3.0 — Step 03 Supabase Cloud & Auth (đã nghiệm thu)
 - Supabase Free project created Singapore; quote $0/month.
 - Applied database schema with RLS for user_settings, books, reading_progress, bookmarks, demo_progress.
 - Private storage bucket with owner-only path policies. Security advisor returned 0 security lints on initial review.
