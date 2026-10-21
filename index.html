@@ -30,7 +30,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
   <div class="header-actions"><button id="testLink" class="icon-btn" title="Thử nghiệm audio" aria-label="Mở trang kiểm thử audio">♫</button><button id="themeBtn" class="icon-btn" title="Đổi giao diện sáng/tối" aria-label="Chuyển giao diện sáng tối">☼</button><button id="libraryBtn" class="header-pill">▣ &nbsp; Tủ sách</button><button id="accountBtn" class="profile" title="Đăng nhập / Đồng bộ cloud" aria-label="Tài khoản và đồng bộ cloud">☁</button></div>
  </div>
 </header>
-<div class="demo-ribbon">Bản xem trước v0.2 — nội dung sách là dữ liệu mẫu, chưa có lưu trữ cloud.</div>
+<div class="demo-ribbon">My Books Player v0.4 · Sách mẫu và sách TXT/EPUB riêng tư · Chờ bạn nghiệm thu.</div>
 <section class="hero" aria-label="Sách nổi bật">
  <div class="shell hero-inner">
   <div><span class="eyebrow"><span class="dot"></span> ĐỀ XUẤT HÔM NAY · SÁCH MẪU</span><h1 id="heroTitle">Đường Về Qua Rừng Sao</h1><div class="author">✦ Tác giả: <strong id="heroAuthor">Phi Lam</strong></div><p class="hero-description" id="heroDescription">Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện.</p><div class="row-actions"><button id="heroRead" class="primary">Đọc ngay &nbsp; →</button><button id="heroListen" class="ghost">♫ &nbsp; Thử audio</button></div></div>
@@ -41,8 +41,8 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
 <main class="shell content">
  <div class="heading"><h2><span class="accent">◷</span> Tiếp tục đọc</h2><button class="text-link" id="allProgress">Xem tủ sách →</button></div>
  <div class="continues" id="continueCards"></div>
- <div class="library-top"><div class="heading" style="margin-bottom:14px"><h2><span class="accent">▣</span> Thư viện mẫu</h2></div><button id="addBook" class="text-link">＋ Thêm sách</button></div>
- <div class="filter-row" id="filters" aria-label="Bộ lọc thư viện"><button class="filter-chip active" data-filter="all">Tất cả</button><button class="filter-chip" data-filter="novel">Tiểu thuyết</button><button class="filter-chip" data-filter="fantasy">Phiêu lưu</button><button class="filter-chip" data-filter="life">Đời sống</button><button class="filter-chip" data-filter="saved">Đã lưu</button></div>
+ <div class="library-top"><div class="heading" style="margin-bottom:14px"><h2><span class="accent">▣</span> Thư viện</h2></div><button id="addBook" class="text-link">＋ Thêm sách</button></div>
+ <div class="filter-row" id="filters" aria-label="Bộ lọc thư viện"><button class="filter-chip active" data-filter="all">Tất cả</button><button class="filter-chip" data-filter="mine">Sách của tôi</button><button class="filter-chip" data-filter="novel">Tiểu thuyết</button><button class="filter-chip" data-filter="fantasy">Phiêu lưu</button><button class="filter-chip" data-filter="life">Đời sống</button><button class="filter-chip" data-filter="saved">Đã lưu</button></div>
  <div class="book-grid" id="bookGrid"></div>
  <div id="emptySearch" class="empty" hidden>Không tìm thấy sách mẫu nào phù hợp.</div>
 </main>
@@ -73,7 +73,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
 <script>
 (function(){
 "use strict";
-var books=[
+var demoBooks=[
 {id:"sky",name:"Đường Về Qua Rừng Sao",author:"Phi Lam",cat:"fantasy",cover:"sky",symbol:"✧",chapter:26,total:80,description:"Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện."},
 {id:"rain",name:"Những Ngày Ở Thành Phố Mưa",author:"Lê An",cat:"life",cover:"rain",symbol:"☂",chapter:4,total:32,description:"Những câu chuyện nhỏ về một thành phố luôn đẫm mưa và những cuộc gặp gỡ không hẹn trước."},
 {id:"gold",name:"Tàn Tích Hoàng Hôn",author:"Minh Mộc",cat:"fantasy",cover:"gold",symbol:"✺",chapter:13,total:76,description:"Hành trình khám phá một vương quốc ngủ quên dưới ánh chiều tà."},
@@ -81,8 +81,9 @@ var books=[
 {id:"sea",name:"Tiếng Gọi Đại Dương",author:"Lam Chi",cat:"novel",cover:"sea",symbol:"≈",chapter:0,total:48,description:"Một hành trình dịu dàng đi tìm câu trả lời bên những con sóng không ngừng nghỉ."},
 {id:"mist",name:"Bên Kia Màn Sương",author:"Hải Đăng",cat:"life",cover:"mist",symbol:"❋",chapter:0,total:53,description:"Khi sương tan, những câu chuyện cũ hiện lên với một diện mạo khác."}
 ];
+var books=demoBooks.slice();
 var chapterNames=["Khởi đầu","Dấu chân đầu tiên","Một cuộc gặp gỡ","Bức thư chưa gửi","Qua miền ký ức","Ngã rẽ","Ánh sáng cuối đường","Một lời hứa"];
-var paragraphs=[
+var demoParagraphs=[
 "Buổi sáng bắt đầu bằng một khoảng lặng rất dài. Ánh nắng mỏng len qua khe cửa, chạm vào những cuốn sách nằm im trên bàn, như thể từng trang giấy đang chờ một người quay trở lại.",
 "Ở phía xa, những mái nhà chìm trong làn sương nhạt. Tiếng bước chân vội vã vang lên trên con đường lát đá, rồi mất hút giữa tiếng gió, để lại một cảm giác khó gọi thành tên.",
 "Minh đặt tay lên bìa cuốn sổ cũ. Trên đó có một dòng chữ đã phai màu: Mọi hành trình đều bắt đầu từ khoảnh khắc chúng ta dám bước đi.",
@@ -96,7 +97,9 @@ var paragraphs=[
 "Phía sau những hàng cây, một cánh cổng nhỏ mở ra. Minh dừng bước trong giây lát, hít một hơi sâu rồi đi tiếp.",
 "Và thế là câu chuyện thực sự bắt đầu."
 ];
+var paragraphs=demoParagraphs,realChapters=null,openToken=0;
 var $=function(id){return document.getElementById(id);};
+function escapeHtml(v){return String(v==null?"":v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function load(key,fallback){try{var raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback;}catch(e){return fallback;}}
 function save(key,value){try{localStorage.setItem(key,JSON.stringify(value));window.dispatchEvent(new CustomEvent("mbp:local-save",{detail:{key:key}}));}catch(e){}}
 var progress=load("mbp_demo_progress",{sky:{chapter:26,para:0},rain:{chapter:4,para:0},gold:{chapter:13,para:0}});
@@ -104,33 +107,52 @@ var saved=load("mbp_demo_saved",["sky","night"]);
 var prefs=load("mbp_reader_prefs",{font:"serif",size:19,line:1.95,paper:"paper"});
 var isDark=load("mbp_site_dark",false),filter="all",tab="reading",readerBook=null,ttsIndex=0,ttsPlaying=false,ttsPaused=false,ttsGeneration=0;
 var synth=window.speechSynthesis,toastTimer=null;
-function cover(b,extra){return '<div class="cover cover-'+b.cover+(extra?" "+extra:"")+'"><span class="cover-decoration">'+b.symbol+'</span><div class="cover-title">'+b.name+'</div><div class="cover-caption">MY BOOKS</div></div>';}
+function cover(b,extra){return '<div class="cover cover-'+(b.isImported?"sea":b.cover)+(extra?" "+extra:"")+'"><span class="cover-decoration">'+escapeHtml(b.symbol)+'</span><div class="cover-title">'+escapeHtml(b.name)+'</div><div class="cover-caption">'+(b.isImported?"SÁCH RIÊNG":"MY BOOKS")+'</div></div>';}
 function bookById(id){return books.find(function(b){return b.id===id;});}
 function toast(s){var el=$("toast");el.textContent=s;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(function(){el.hidden=true;},3400);}
 function progressInfo(b){var p=progress[b.id];return p&&p.chapter>0?Math.min(100,Math.round(p.chapter/b.total*100)):0;}
 function renderHome(){
- $("heroTitle").textContent=books[0].name;$("heroAuthor").textContent=books[0].author;$("heroDescription").textContent=books[0].description;
- $("heroCover").innerHTML=cover(books[0],"hero-cover");
- var continued=books.filter(function(b){return progress[b.id]&&progress[b.id].chapter>0;});
+ $("heroTitle").textContent=demoBooks[0].name;$("heroAuthor").textContent=demoBooks[0].author;$("heroDescription").textContent=demoBooks[0].description;
+ $("heroCover").innerHTML=cover(demoBooks[0],"hero-cover");
+ var continued=books.filter(b=>progress[b.id]&&progress[b.id].chapter>0);
  $("continueCards").innerHTML=continued.length?continued.slice(0,2).map(function(b){
- var p=progress[b.id];return '<div class="continue-card">'+cover(b,'')+'<div class="continue-data"><div class="continue-title">'+b.name+'</div><div class="small-muted">'+b.author+' · Chương '+p.chapter+'/'+b.total+'</div><div class="progress-track"><div class="progress-fill" style="width:'+progressInfo(b)+'%"></div></div><div class="small-muted">Đã đọc '+progressInfo(b)+'%</div></div><button class="play-round" data-open="'+b.id+'" aria-label="Đọc tiếp '+b.name+'">▶</button></div>';
+ var p=progress[b.id];return '<div class="continue-card">'+cover(b,'')+'<div class="continue-data"><div class="continue-title">'+escapeHtml(b.name)+'</div><div class="small-muted">'+escapeHtml(b.author)+' · Chương '+p.chapter+'/'+b.total+'</div><div class="progress-track"><div class="progress-fill" style="width:'+progressInfo(b)+'%"></div></div><div class="small-muted">Đã đọc '+progressInfo(b)+'%</div></div><button class="play-round" data-open="'+b.id+'" aria-label="Đọc tiếp '+escapeHtml(b.name)+'">▶</button></div>';
  }).join(""):'<div class="empty">Chưa có sách đang đọc. Chọn một cuốn sách để bắt đầu.</div>';
  renderBooks();
 }
-function renderBooks(){var term=$("search").value.toLocaleLowerCase("vi").trim();var found=books.filter(function(b){return (filter==="all"||filter==="saved"&&saved.includes(b.id)||b.cat===filter) &&(!term||(b.name+" "+b.author).toLocaleLowerCase("vi").includes(term));});$("bookGrid").innerHTML=found.map(function(b){return '<article class="book"><button class="book-cover-button" data-open="'+b.id+'" aria-label="Mở '+b.name+'">'+cover(b,"")+'</button><button class="book-name" data-open="'+b.id+'">'+b.name+'</button><div class="book-author">'+b.author+'</div><div class="book-meta"><span class="small-muted">'+(progressInfo(b)?'Đã đọc '+progressInfo(b)+'%':'Chưa đọc')+'</span><button class="bookmark '+(saved.includes(b.id)?"saved":"")+'" data-save="'+b.id+'" title="Lưu hoặc bỏ lưu" aria-label="'+(saved.includes(b.id)?"Bỏ lưu ":"Lưu ")+b.name+'">'+(saved.includes(b.id)?"♥":"♡")+'</button></div></article>';}).join("");$("emptySearch").hidden=found.length>0;}
+function renderBooks(){
+ var term=$("search").value.toLocaleLowerCase("vi").trim();
+ var found=books.filter(function(b){return (filter==="all"||filter==="saved"&&saved.includes(b.id)||b.cat===filter)&&(!term||(b.name+" "+b.author).toLocaleLowerCase("vi").includes(term));});
+ $("bookGrid").innerHTML=found.map(function(b){return '<article class="book"><button class="book-cover-button" data-open="'+b.id+'" aria-label="Mở '+escapeHtml(b.name)+'">'+cover(b,"")+'</button><button class="book-name" data-open="'+b.id+'">'+escapeHtml(b.name)+'</button><div class="book-author">'+escapeHtml(b.author)+'</div><div class="book-meta"><span class="small-muted">'+(progressInfo(b)?'Đã đọc '+progressInfo(b)+'%':b.isImported?escapeHtml(b.sourceFormat.toUpperCase()):'Chưa đọc')+'</span><button class="bookmark '+(saved.includes(b.id)?"saved":"")+'" data-save="'+b.id+'" title="Lưu hoặc bỏ lưu" aria-label="'+(saved.includes(b.id)?"Bỏ lưu ":"Lưu ")+escapeHtml(b.name)+'">'+(saved.includes(b.id)?"♥":"♡")+'</button></div></article>';}).join("");
+ $("emptySearch").hidden=found.length>0;
+}
 function toggleSave(id){saved=saved.includes(id)?saved.filter(function(x){return x!==id;}):saved.concat(id);save("mbp_demo_saved",saved);renderHome();if(!$("libraryOverlay").hidden)renderDialog();}
 function openLibrary(newTab){tab=newTab||"reading";$("libraryOverlay").hidden=false;document.body.style.overflow="hidden";renderDialog();$("closeLibrary").focus();}
 function closeLibrary(){$("libraryOverlay").hidden=true;if($("reader").hidden)document.body.style.overflow="";}
 function renderDialog(){
- document.querySelectorAll(".dialog-tab").forEach(function(btn){btn.classList.toggle("active",btn.dataset.tab===tab);});
- if(tab==="collection"){$("dialogList").innerHTML='<div class="empty"><strong>Bộ sưu tập riêng</strong><p>Chức năng tạo bộ sưu tập sẽ được bổ sung khi xây dựng kho sách cá nhân.</p></div>';return;}
- var list=books.filter(function(b){return tab==="saved"?saved.includes(b.id):progress[b.id]&&progress[b.id].chapter>0;});
- $("dialogList").innerHTML=list.length?list.map(function(b){var p=progress[b.id],label=p?"Chương "+p.chapter+"/"+b.total+" · "+progressInfo(b)+"%":"Chưa đọc";return '<div class="dialog-row">'+cover(b,"")+'<div class="dialog-item-main"><strong>'+b.name+'</strong><small>'+b.author+'</small><br><small style="color:var(--pink)">'+label+'</small></div><button class="play-round" data-open="'+b.id+'" aria-label="Mở '+b.name+'">▶</button></div>';}).join(""):'<div class="empty">Chưa có sách trong mục này.</div>';
+ document.querySelectorAll(".dialog-tab").forEach(btn=>btn.classList.toggle("active",btn.dataset.tab===tab));
+ if(tab==="collection"){$("dialogList").innerHTML='<div class="empty"><strong>Bộ sưu tập riêng</strong><p>Chức năng tạo bộ sưu tập sẽ được bổ sung sau.</p></div>';return;}
+ var list=books.filter(b=>tab==="saved"?saved.includes(b.id):progress[b.id]&&progress[b.id].chapter>0);
+ $("dialogList").innerHTML=list.length?list.map(function(b){var p=progress[b.id],label=p?"Chương "+p.chapter+"/"+b.total+" · "+progressInfo(b)+"%":"Chưa đọc";return '<div class="dialog-row">'+cover(b,"")+'<div class="dialog-item-main"><strong>'+escapeHtml(b.name)+'</strong><small>'+escapeHtml(b.author)+'</small><br><small style="color:var(--pink)">'+label+'</small></div><button class="play-round" data-open="'+b.id+'" aria-label="Mở '+escapeHtml(b.name)+'">▶</button></div>';}).join(""):'<div class="empty">Chưa có sách trong mục này.</div>';
 }
-function chapterTitle(n){return "Chương "+n+": "+chapterNames[(n-1)%chapterNames.length];}
+function chapterTitle(n){
+ if(readerBook?.isImported&&realChapters)return realChapters[n-1]?.title||"Chương "+n;
+ return "Chương "+n+": "+chapterNames[(n-1)%chapterNames.length];
+}
+function selectParagraphs(){
+ if(readerBook?.isImported&&realChapters){const p=progress[readerBook.id]||{chapter:1,para:0};paragraphs=realChapters[p.chapter-1]?.paragraphs||["Không có nội dung chương này."];}
+ else paragraphs=demoParagraphs;
+}
 function stopSpeech(){ttsGeneration++;if(synth)synth.cancel();ttsPlaying=false;ttsPaused=false;syncPlayer();}
 function syncPlayer(){var btn=$("miniToggle");btn.textContent=ttsPlaying&&!ttsPaused?"Ⅱ":"▶";btn.setAttribute("aria-label",ttsPlaying&&!ttsPaused?"Tạm dừng giọng đọc":"Phát giọng đọc");$("miniState").textContent=ttsPlaying?(ttsPaused?"Đang tạm dừng":"TTS trình duyệt · có thể dừng khi khóa màn hình"):"Nhấn ▶ để nghe giọng mặc định"; }
-function renderReader(resetScroll){if(!readerBook)return;var b=readerBook,p=progress[b.id]||{chapter:1,para:0};$("readerTitle").textContent=b.name;$("readerProgress").textContent="Chương "+p.chapter+" / "+b.total;$("readingPage").innerHTML='<h1>'+chapterTitle(p.chapter)+'</h1>'+paragraphs.map(function(text,i){return '<p data-para="'+i+'"'+(p.para===i?' class="highlight"':'')+'>'+text+'</p>';}).join("");$("prevChapter").disabled=p.chapter<=1;$("nextChapter").disabled=p.chapter>=b.total;$("miniTitle").textContent=b.name+" · Chương "+p.chapter;if(resetScroll)$("readerScroll").scrollTop=0;}
+function renderReader(resetScroll){
+ if(!readerBook)return;
+ var b=readerBook,p=progress[b.id]||{chapter:1,para:0};selectParagraphs();
+ $("readerTitle").textContent=b.name;$("readerProgress").textContent="Chương "+p.chapter+" / "+b.total;
+ $("readingPage").innerHTML='<h1>'+escapeHtml(chapterTitle(p.chapter))+'</h1>'+paragraphs.map(function(text,i){return '<p data-para="'+i+'"'+(Number(p.para)===i?' class="highlight"':'')+'>'+escapeHtml(text)+'</p>';}).join("");
+ $("prevChapter").disabled=p.chapter<=1;$("nextChapter").disabled=p.chapter>=b.total;
+ $("miniTitle").textContent=b.name+" · Chương "+p.chapter;if(resetScroll)$("readerScroll").scrollTop=0;
+}
 function restoreMarkedParagraph(bookId,chapter,para){
  var index=Number(para);
  if(!Number.isInteger(index)||index<0||index>=paragraphs.length)return;
@@ -148,11 +170,45 @@ function restoreMarkedParagraph(bookId,chapter,para){
  reveal();
  requestAnimationFrame(reveal);
 }
-function savePosition(chapter,para){progress[readerBook.id]={chapter:chapter,para:para};save("mbp_demo_progress",progress);renderReader(false);}
-function openReader(id){var b=bookById(id);if(!b)return;closeLibrary();stopSpeech();readerBook=b;if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};save("mbp_demo_progress",progress);}var p=progress[b.id];ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";applyPrefs();renderReader(true);restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();}
-function closeReader(){stopSpeech();readerBook=null;$("reader").hidden=true;$("miniPlayer").classList.remove("visible");closeDrawer();document.body.style.overflow="";renderHome();}
+function savePosition(chapter,para){
+ progress[readerBook.id]={chapter:chapter,para:para};
+ if(readerBook.isImported){window.mbpSaveRealProgress?.(readerBook.id,chapter,para);}
+ else save("mbp_demo_progress",progress);
+ renderReader(false);
+}
+function openReader(id){
+ var b=bookById(id);if(!b)return;
+ var token=++openToken;closeLibrary();stopSpeech();
+ if(b.isImported){
+  if(!window.mbpLoadRealBook){toast("Đang tải thư viện, vui lòng thử lại.");return;}
+  toast("Đang mở sách riêng tư…");
+  Promise.resolve(window.mbpLoadRealBook(b)).then(function(chapters){
+   if(token!==openToken)return;
+   if(!chapters||!chapters.length)throw Error("Tệp sách không có chương để đọc.");
+   realChapters=chapters;b.total=chapters.length;
+   present();
+  }).catch(function(e){if(token===openToken){toast("Không mở được sách: "+(e.message||e));}});
+ }else{realChapters=null;present();}
+ function present(){
+  readerBook=b;
+  if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};if(!b.isImported)save("mbp_demo_progress",progress);}
+  var p=progress[b.id];if(p.chapter>b.total){p.chapter=b.total;p.para=0;}
+  ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";
+  applyPrefs();renderReader(true);restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();
+ }
+}
+function closeReader(){
+ ++openToken;stopSpeech();readerBook=null;realChapters=null;paragraphs=demoParagraphs;
+ $("reader").hidden=true;$("miniPlayer").classList.remove("visible");closeDrawer();document.body.style.overflow="";renderHome();
+}
 function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);}
-function markPara(i){if(!readerBook)return;var p=progress[readerBook.id];p.para=i;save("mbp_demo_progress",progress);document.querySelectorAll("#readingPage p").forEach(function(x){x.classList.toggle("highlight",Number(x.dataset.para)===i);});}
+function markPara(i){
+ if(!readerBook)return;
+ var p=progress[readerBook.id];p.para=i;
+ if(readerBook.isImported)window.mbpSaveRealProgress?.(readerBook.id,p.chapter,i);
+ else save("mbp_demo_progress",progress);
+ document.querySelectorAll("#readingPage p").forEach(function(x){x.classList.toggle("highlight",Number(x.dataset.para)===i);});
+}
 function applyPrefs(){var page=$("readingPage");page.style.setProperty("--fontsize",prefs.size+"px");page.style.setProperty("--lineheight",String(prefs.line));page.style.setProperty("--readfont",prefs.font==="sans"?'system-ui,-apple-system,"Segoe UI",sans-serif':'Georgia,"Times New Roman",serif');$("reader").dataset.paper=prefs.paper;$("fontFamily").value=prefs.font;$("fontSize").value=prefs.size;$("fontSizeValue").textContent=prefs.size;$("lineHeight").value=prefs.line;$("lineHeightValue").textContent=prefs.line;document.querySelectorAll(".paper-btn").forEach(function(x){x.classList.toggle("active",x.dataset.color===prefs.paper);});}
 function closeDrawer(){$("settingsDrawer").hidden=true;$("tocDrawer").hidden=true;}
 function openDrawer(id){closeDrawer();$(id).hidden=false;}
@@ -171,11 +227,20 @@ function playSpeech(){
 function gotoAudio(){stopSpeech();window.location.href="./audio-test.html";}
 function theme(){document.documentElement.dataset.theme=isDark?"dark":"light";$("themeBtn").textContent=isDark?"☀":"☼";}
 theme();renderHome();syncPlayer();
+window.mbpApp={
+ setRealBooks:function(realBooks,realProgress){
+  books=demoBooks.concat(realBooks);
+  for(const key of Object.keys(progress)){if(key.length===36&&key.includes("-"))delete progress[key];}
+  Object.assign(progress,realProgress||{});renderHome();if(!$("libraryOverlay").hidden)renderDialog();
+ },
+ openBook:openReader,
+ notify:toast
+};
 document.addEventListener("click",function(e){var saveBtn=e.target.closest("[data-save]"),openBtn=e.target.closest("[data-open]");if(saveBtn){toggleSave(saveBtn.dataset.save);return;}if(openBtn){openReader(openBtn.dataset.open);return;}var tabBtn=e.target.closest("[data-tab]");if(tabBtn){tab=tabBtn.dataset.tab;renderDialog();return;}var color=e.target.closest("[data-color]");if(color){prefs.paper=color.dataset.color;save("mbp_reader_prefs",prefs);applyPrefs();return;}var ch=e.target.closest("[data-chapter]");if(ch&&readerBook){stopSpeech();ttsIndex=0;savePosition(Number(ch.dataset.chapter),0);renderReader(true);closeDrawer();return;}if(e.target.hasAttribute("data-close-drawer"))closeDrawer();});
 $("search").addEventListener("input",function(){renderBooks();document.querySelector(".content").scrollIntoView({block:"start"});});
 document.querySelectorAll("[data-filter]").forEach(function(btn){btn.addEventListener("click",function(){filter=btn.dataset.filter;document.querySelectorAll("[data-filter]").forEach(function(x){x.classList.toggle("active",x===btn);});renderBooks();});});
 $("heroRead").onclick=function(){openReader("sky");};$("heroListen").onclick=gotoAudio;$("testLink").onclick=gotoAudio;$("navAudio").onclick=gotoAudio;
-$("themeBtn").onclick=function(){isDark=!isDark;save("mbp_site_dark",isDark);theme();};$("accountBtn").onclick=function(){if(window.mbpAuthOpen)window.mbpAuthOpen();else toast("Đang tải kết nối Cloud, hãy thử lại.");};$("addBook").onclick=function(){toast("Upload TXT và EPUB sẽ có ở bước nhập sách. Bản này chỉ chứa sách mẫu.");};
+$("themeBtn").onclick=function(){isDark=!isDark;save("mbp_site_dark",isDark);theme();};$("accountBtn").onclick=function(){if(window.mbpAuthOpen)window.mbpAuthOpen();else toast("Đang tải kết nối Cloud, hãy thử lại.");};$("addBook").onclick=function(){window.mbpImportDialog?.()||(!window.mbpImportDialog&&toast("Đang tải công cụ nhập sách."));};
 $("libraryBtn").onclick=function(){openLibrary("reading");};$("allProgress").onclick=function(){openLibrary("reading");};$("navLibrary").onclick=function(){openLibrary("reading");};$("navContinue").onclick=function(){openReader((books.find(function(b){return progress[b.id]&&progress[b.id].chapter;})||books[0]).id);};$("navHome").onclick=function(){window.scrollTo({top:0,behavior:"smooth"});};$("closeLibrary").onclick=closeLibrary;$("libraryOverlay").addEventListener("click",function(e){if(e.target===$("libraryOverlay"))closeLibrary();});
 $("homeLink").onclick=function(e){e.preventDefault();closeReader();window.scrollTo({top:0,behavior:"smooth"});};
 $("exitReader").onclick=closeReader;$("prevChapter").onclick=function(){chapterMove(-1);};$("nextChapter").onclick=function(){chapterMove(1);};
@@ -190,6 +255,9 @@ window.addEventListener("pagehide",function(){stopSpeech();});
 })();
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js"></script>
-<script defer src="./cloud.js?v=0.3.0"></script>
+<script defer src="./cloud.js?v=0.4.0"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script defer src="./book-parser.js?v=0.4.0"></script>
+<script defer src="./book-library.js?v=0.4.0"></script>
 </body>
 </html>
