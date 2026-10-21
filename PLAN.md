@@ -6,7 +6,7 @@ Nguyên tắc: một mốc -> commit code -> deploy GitHub Pages -> báo cáo đ
 |---|---|---|
 | 01 | Repo, Pages, Audio thử nghiệm miễn phí, xác minh URL | Đã được người dùng báo test thành công |
 | 02 | Giao diện theo mẫu, mobile-first, bookshelf modal, reader mẫu | Đã nghiệm thu (7/7 và v0.2.2 đã xác nhận) |
-| 03 | Supabase đăng nhập cá nhân, kho sách riêng tư, bảo mật RLS | Đang chuẩn bị schema; chờ chủ dự án xác nhận organization để tạo Supabase project |
+| 03 | Supabase đăng nhập cá nhân, kho sách riêng tư, bảo mật RLS | Đã tạo Supabase project, kết nối login + đồng bộ demo, chờ user test v0.3 |
 | 04 | Import TXT và EPUB, metadata, bìa, mục lục, xử lý lỗi | Chưa làm |
 | 05 | Reader hoàn chỉnh, bookmark, vị trí đọc | Chưa làm (v0.2 mới mô phỏng trên dữ liệu demo) |
 | 06 | Audio adapter, kết nối reader, highlight, vị trí nghe/đọc | Chưa làm (v0.2 chỉ TTS thử trong reader) |

@@ -1,5 +1,5 @@
--- My Books Player • bước 03 (BẢN NHÁP, CHƯA ÁP DỤNG)
--- Dự định chạy trên một Supabase project do chủ tài khoản xác nhận.
+-- My Books Player • bước 03 (ĐÃ ÁP DỤNG)
+-- Đã áp dụng thành công vào project wdrawjvdppikutzvzoxe (Singapore).
 -- Mọi dữ liệu đều phân vùng theo auth.uid(), không có quyền truy cập công khai.
 
 create table public.user_settings (
@@ -96,3 +96,17 @@ create policy "books_objects_owner_delete" on storage.objects
   for delete to authenticated
   using (bucket_id = 'my-books-private'
     and (storage.foldername(name))[1] = (select auth.uid())::text);
+
+-- Đồng bộ vị trí của các sách demo trước khi triển khai upload thật
+create table public.demo_progress (
+ owner_id uuid not null references auth.users(id) on delete cascade,
+ demo_book_id text not null check (demo_book_id ~ '^[a-z0-9_-]{1,50}$'),
+ chapter_index integer not null default 0 check (chapter_index >= 0),
+ paragraph_index integer not null default 0 check (paragraph_index >= 0),
+ updated_at timestamptz not null default now(),
+ primary key(owner_id,demo_book_id)
+);
+alter table public.demo_progress enable row level security;
+create policy "owner_only_demo_progress" on public.demo_progress
+ for all to authenticated using(owner_id=(select auth.uid()))
+ with check(owner_id=(select auth.uid()));
