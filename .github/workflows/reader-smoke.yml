@@ -1,0 +1,23 @@
+name: Reader restore smoke test
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android-mobile-reader:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save playwright
+      - run: npx playwright install --with-deps chromium
+      - name: Test reopening bookmarked paragraph in mobile viewport
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/my-books-player-test.log 2>&1 &
+          sleep 2
+          node tests/reader-resume.mjs

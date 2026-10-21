@@ -1,19 +1,20 @@
 # Changelog
 
-## v0.2.0 — Responsive UI milestone (CHỜ TEST)
-- Thiết kế lại trang chủ theo hướng mobile-first, gần phong cách ảnh tham khảo.
-- Hero nổi bật, thư viện sách mẫu, tìm kiếm, filter, danh sách tiếp tục đọc.
-- Modal Tủ sách: Đang đọc / Đã lưu / Bộ sưu tập (bộ sưu tập là placeholder rõ ràng).
-- Reader toàn màn hình, mục lục, chuyển chương, font/cỡ chữ/giãn dòng/màu nền.
-- Lưu thử vị trí đọc, sách đã lưu, giao diện và tùy chọn đọc vào localStorage.
-- TTS mặc định miễn phí ngay trong Reader; chưa bảo đảm phát khi khóa màn hình.
-- Giữ nguyên bản audio thử nghiệm v0.1 tại /audio-test.html.
-- Thêm PLAN.md / TESTING.md, cập nhật README và chuẩn hóa báo cáo.
-- **Chưa có** cloud, đăng nhập, import TXT/EPUB thực tế, đồng bộ thiết bị, xử lý giọng TTS do người dùng cung cấp.
+## v0.2.2 — Reader restore follow-up (chờ bạn test)
+- Sửa lần hai lỗi vào sách không tự cuộn đến đoạn đã đánh dấu.
+- Đổi từ phép tính scrollTop riêng sang đúng scrollIntoView() mà TTS đang sử dụng.
+- Bổ sung min-height:0 và tắt scroll anchoring cho khung Reader để tránh can thiệp từ trình duyệt.
+- Không thay đổi vị trí đã lưu, audio-test hoặc dữ liệu mẫu.
+- Cần người dùng xác nhận trên Chrome Android; chưa coi lỗi đã được nghiệm thu.
 
-**Trạng thái triển khai:** Code đã đưa lên main; cần kiểm tra GitHub Pages và người dùng xác nhận.
+## v0.2.1 — Bản sửa chưa đạt
+- Đã thử khôi phục vị trí bằng cách tính scrollTop sau 2 animation frames.
+- Người dùng báo vẫn không tự cuộn đến đoạn đã đánh dấu; lỗi được mở lại.
 
-## v0.1.0 — Audio proof of concept (đã được người dùng báo test thành công)
-- TTS mặc định Chrome/Android; file TXT cục bộ.
-- HTML Audio + Media Session API với file MP3/WAV hoặc WAV mẫu.
-- Người dùng xử lý kích hoạt GitHub Pages và báo đã test thành công.
+## v0.2.0 — Bước 02
+- Đã triển khai giao diện responsive, Tủ sách mẫu, reader, TTS cơ bản.
+- Người dùng xác nhận 7/7 mục kiểm tra đạt, kèm lỗi khôi phục vị trí cuộn khi mở sách.
+
+## v0.1.0 — Audio proof of concept
+- TTS Chrome/Android miễn phí, thử Audio thật và khóa màn hình trên trang /audio-test.html.
+- Người dùng đã kiểm tra thành công.
