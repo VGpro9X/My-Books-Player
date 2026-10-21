@@ -234,6 +234,7 @@ window.mbpApp={
   Object.assign(progress,realProgress||{});renderHome();if(!$("libraryOverlay").hidden)renderDialog();
  },
  openBook:openReader,
+ closePrivateReader:function(){if(readerBook&&readerBook.isImported)closeReader();},
  notify:toast
 };
 document.addEventListener("click",function(e){var saveBtn=e.target.closest("[data-save]"),openBtn=e.target.closest("[data-open]");if(saveBtn){toggleSave(saveBtn.dataset.save);return;}if(openBtn){openReader(openBtn.dataset.open);return;}var tabBtn=e.target.closest("[data-tab]");if(tabBtn){tab=tabBtn.dataset.tab;renderDialog();return;}var color=e.target.closest("[data-color]");if(color){prefs.paper=color.dataset.color;save("mbp_reader_prefs",prefs);applyPrefs();return;}var ch=e.target.closest("[data-chapter]");if(ch&&readerBook){stopSpeech();ttsIndex=0;savePosition(Number(ch.dataset.chapter),0);renderReader(true);closeDrawer();return;}if(e.target.hasAttribute("data-close-drawer"))closeDrawer();});
