@@ -1,25 +1,25 @@
-# Test My Books Player v0.4 — TXT và EPUB thật
+# My Books Player v0.5 — Checklist Reader
 
-URL: https://vgpro9x.github.io/My-Books-Player/?v=0.4.0
-Trang Audio cũ: https://vgpro9x.github.io/My-Books-Player/audio-test.html
+Website: https://vgpro9x.github.io/My-Books-Player/?v=0.5.0
+Audio Test: https://vgpro9x.github.io/My-Books-Player/audio-test.html
 
-## Kiểm tra trên Android
-1. Đăng nhập tài khoản Supabase đã dùng ở v0.3 (biểu tượng ☁).
-2. Bấm "＋ Thêm sách", chọn TXT khoảng vài chương. Kiểm tra tên/tác giả có thể sửa trước khi tải.
-3. Bấm tải lên. Xác nhận sách mới có trong "Sách của tôi" và trên thư viện.
-4. Mở sách TXT. Kiểm tra **nội dung THẬT**, chuyển chương, mục lục.
-5. Chạm đoạn cuối chương để đánh dấu; đóng và mở lại: phải nhảy đúng đoạn.
-6. Thử nút ▶ TTS: đọc chính nội dung TXT/EPUB (giới hạn Chrome hiện tại).
-7. Nhập một EPUB không có DRM. Xem tên, tác giả, số chương và thứ tự chương.
-8. Tải lại trang hoặc đăng nhập trình duyệt/điện thoại khác: sách đã tải và vị trí đọc phải còn.
-9. Thử nhập file PDF hoặc TXT rỗng: phải từ chối.
-10. Dùng một sách thử không quan trọng để kiểm tra nút "Xóa" và xác nhận sách biến mất.
+## Trên Android Chrome
+1. Đăng nhập bằng tài khoản Supabase đã kiểm tra ở v0.4, mở một TXT/EPUB **thật**.
+2. Ở Reader, chạm biểu tượng **🔖**, nhấn **＋ Lưu vị trí hiện tại**; xem danh sách có số chương, đoạn và đoạn trích.
+3. Chạm một đoạn khác (hoặc cuộn đến đoạn khác, đợi trên 1 giây), lưu thêm dấu trang thứ hai.
+4. Từ danh sách, bấm **↗ Đến đoạn** tại dấu trang trước đó; Reader phải nhảy đúng chương và đoạn.
+5. Xóa một dấu trang; xác nhận dấu còn lại không bị ảnh hưởng.
+6. Cuộn đọc khoảng vài đoạn **không chạm chữ**, dừng trên 2 giây. Đóng Reader, mở lại: phải nhảy đến vị trí vừa đọc.
+7. Tải lại website hoặc đăng xuất/đăng nhập lại: cả dấu trang và vị trí đọc sách thật vẫn còn.
+8. Nếu có thiết bị/trình duyệt thứ hai, đăng nhập cùng tài khoản: dấu trang phải xuất hiện ở máy thứ hai. Khi kiểm tra không nên sửa cùng một vị trí đồng thời.
+9. Thử dấu trang trên một **sách mẫu**: có thể lưu/nhảy nhưng chỉ lưu trên trình duyệt này.
+10. Kiểm tra các chức năng đã nghiệm thu: chọn chương, đổi font/nền, TTS đọc nội dung, Audio Test URL cũ.
 
-## Giới hạn
-- Chỉ TXT/EPUB dưới 20 MB, EPUB chủ yếu trích xuất text; chưa bảo toàn hình ảnh, bảng, CSS, chú thích hay DRM.
-- Bìa sách riêng tạm là bìa phong cách mặc định, chưa lấy ảnh cover trong EPUB.
-- Chưa có offline, giải quyết xung đột hai máy chỉnh cùng lúc.
-- TTS miễn phí từ trình duyệt chưa bảo đảm phát khi khóa màn hình.
-- Nếu thấy lỗi, gửi ảnh và loại file; không gửi mật khẩu, mã OTP hay sách có thông tin riêng tư lên nơi công khai.
+## Cần chú ý
+- Dấu trang của **sách thật** được đồng bộ qua tài khoản Supabase, phải có Internet.
+- Dấu trang demo chỉ lưu localStorage.
+- Mỗi lần ngừng cuộn khoảng 900 ms thì Reader có thể cập nhật đoạn đang đọc; khi tự mở lại vị trí, ứng dụng tạm tránh ghi đè do cuộn tự động.
+- TTS trình duyệt vẫn có thể dừng khi Android khóa màn hình.
+- Chưa triển khai xung đột tiến độ khi mở đồng thời hai máy (mốc 07).
 
-**Bước 04 cần người dùng xác nhận mới chuyển bước 05.**
+Bước 05 chỉ được chốt khi người dùng test và xác nhận.
