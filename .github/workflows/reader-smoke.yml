@@ -22,3 +22,4 @@ jobs:
           sleep 2
           node tests/reader-resume.mjs
           node tests/book-parser-smoke.mjs
+          node tests/reader-bookmarks-smoke.mjs
