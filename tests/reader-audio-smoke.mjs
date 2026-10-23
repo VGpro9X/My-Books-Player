@@ -43,6 +43,7 @@ try {
  const mode=await page.evaluate(()=>window.mbpAudio.getMode());
  if(mode!=="tts"||!await page.locator("#audioTtsArea").isVisible())throw Error("Free TTS mode unavailable");
  console.log("PASS: free browser TTS adapter remains available");
+ await page.locator("#audioClose").click();
  await page.locator("#exitReader").click();
  const closed=await page.evaluate(()=>window.mbpAudio.getState());
  if(closed.loaded)throw Error("Reader close failed to unload audio");
