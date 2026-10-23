@@ -30,7 +30,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
   <div class="header-actions"><button id="testLink" class="icon-btn" title="Thử nghiệm audio" aria-label="Mở trang kiểm thử audio">♫</button><button id="themeBtn" class="icon-btn" title="Đổi giao diện sáng/tối" aria-label="Chuyển giao diện sáng tối">☼</button><button id="libraryBtn" class="header-pill">▣ &nbsp; Tủ sách</button><button id="accountBtn" class="profile" title="Đăng nhập / Đồng bộ cloud" aria-label="Tài khoản và đồng bộ cloud">☁</button></div>
  </div>
 </header>
-<div class="demo-ribbon">My Books Player v0.5 · Dấu trang nhiều vị trí và tự lưu tiến độ · Chờ bạn nghiệm thu.</div>
+<div class="demo-ribbon">My Books Player v0.6 · TTS và trình phát file audio trong Reader · Chờ bạn nghiệm thu.</div>
 <section class="hero" aria-label="Sách nổi bật">
  <div class="shell hero-inner">
   <div><span class="eyebrow"><span class="dot"></span> ĐỀ XUẤT HÔM NAY · SÁCH MẪU</span><h1 id="heroTitle">Đường Về Qua Rừng Sao</h1><div class="author">✦ Tác giả: <strong id="heroAuthor">Phi Lam</strong></div><p class="hero-description" id="heroDescription">Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện.</p><div class="row-actions"><button id="heroRead" class="primary">Đọc ngay &nbsp; →</button><button id="heroListen" class="ghost">♫ &nbsp; Thử audio</button></div></div>
@@ -55,7 +55,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
  </div>
 </div>
 <div id="reader" class="reader" data-paper="paper" hidden>
- <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="readerBookmarksBtn" class="reader-icon" aria-label="Quản lý dấu trang" title="Dấu trang">🔖</button><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
+ <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="readerAudioBtn" class="reader-icon" aria-label="Nghe sách" title="Audio trong Reader">♫</button><button id="readerBookmarksBtn" class="reader-icon" aria-label="Quản lý dấu trang" title="Dấu trang">🔖</button><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
  <div class="reader-scroll" id="readerScroll"><article class="reading-page" id="readingPage"></article></div>
  <div class="reader-toolbar"><button id="prevChapter">← Chương trước</button><span id="readerProgress">Chương 1 / 80</span><button id="nextChapter">Chương sau →</button></div>
 </div>
@@ -198,10 +198,10 @@ function openReader(id){
  }
 }
 function closeReader(){
- ++openToken;clearTimeout(readerScrollTimer);window.mbpBookmarksClose?.();stopSpeech();readerBook=null;realChapters=null;paragraphs=demoParagraphs;
+ ++openToken;clearTimeout(readerScrollTimer);window.mbpAudio?.onReaderClose?.();window.mbpBookmarksClose?.();stopSpeech();readerBook=null;realChapters=null;paragraphs=demoParagraphs;
  $("reader").hidden=true;$("miniPlayer").classList.remove("visible");closeDrawer();document.body.style.overflow="";renderHome();
 }
-function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;clearTimeout(readerScrollTimer);stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);restoreGuardUntil=Date.now()+1100;}
+function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;window.mbpAudio?.onChapterChange?.();clearTimeout(readerScrollTimer);stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);restoreGuardUntil=Date.now()+1100;}
 function markPara(i){
  if(!readerBook)return;
  var p=progress[readerBook.id];if(Number(p.para)===i)return;p.para=i;
@@ -214,7 +214,7 @@ function closeDrawer(){$("settingsDrawer").hidden=true;$("tocDrawer").hidden=tru
 function openDrawer(id){closeDrawer();$(id).hidden=false;}
 function populateToc(){if(!readerBook)return;$("tocList").innerHTML=Array.from({length:readerBook.total},function(_,i){return '<button class="dialog-tab" style="display:block;width:100%;text-align:left;margin:4px 0;'+(progress[readerBook.id].chapter===i+1?'color:var(--pink);':'')+'" data-chapter="'+(i+1)+'">'+chapterTitle(i+1)+'</button>';}).join("");}
 function playSpeech(){
- if(!readerBook)return;if(!synth){toast("Thiết bị không hỗ trợ Web Speech API.");return;}
+ if(!readerBook)return;window.mbpAudio?.stopFile?.();if(!synth){toast("Thiết bị không hỗ trợ Web Speech API.");return;}
  if(ttsPlaying&&ttsPaused){synth.resume();ttsPaused=false;syncPlayer();return;}
  if(ttsPlaying){synth.pause();ttsPaused=true;syncPlayer();return;}
  stopSpeech();ttsPlaying=true;var generation=ttsGeneration;ttsIndex=progress[readerBook.id].para||0;syncPlayer();
@@ -228,6 +228,15 @@ function gotoAudio(){stopSpeech();window.location.href="./audio-test.html";}
 function theme(){document.documentElement.dataset.theme=isDark?"dark":"light";$("themeBtn").textContent=isDark?"☀":"☼";}
 theme();renderHome();syncPlayer();
 window.mbpReader={
+ toggleTts:playSpeech,
+ stopTts:stopSpeech,
+ setAudioParagraph:function(index){
+  if(!readerBook||!Number.isInteger(index)||index<0||index>=paragraphs.length)return;
+  restoreGuardUntil=Date.now()+1600;
+  markPara(index);
+  const target=$("readingPage").querySelector('p[data-para="'+index+'"]');
+  if(target)target.scrollIntoView({block:"center",behavior:"smooth"});
+ },
  getState:function(){
   if(!readerBook||$("reader").hidden)return null;
   var p=progress[readerBook.id]||{chapter:1,para:0};
@@ -236,7 +245,7 @@ window.mbpReader={
  },
  navigate:function(ch,para){
   if(!readerBook||!Number.isInteger(ch)||ch<1||ch>readerBook.total)return false;
-  clearTimeout(readerScrollTimer);stopSpeech();
+  window.mbpAudio?.onChapterChange?.();clearTimeout(readerScrollTimer);stopSpeech();
   var chapterParagraphs=readerBook.isImported?(realChapters?.[ch-1]?.paragraphs||[]):demoParagraphs;
   var index=Math.max(0,Math.min(chapterParagraphs.length-1,Number(para)||0));
   if(!Number.isFinite(index)||index<0)return false;
@@ -255,7 +264,8 @@ window.mbpApp={
  closePrivateReader:function(){if(readerBook&&readerBook.isImported)closeReader();},
  notify:toast
 };
-$("readerBookmarksBtn").onclick=function(){window.mbpBookmarksOpen?.();};
+$("readerAudioBtn").onclick=function(){window.mbpBookmarksClose?.();window.mbpAudio?.open?.();};
+$("readerBookmarksBtn").onclick=function(){window.mbpAudio?.close?.();window.mbpBookmarksOpen?.();};
 $("readerScroll").addEventListener("touchstart",function(){if(readerBook)restoreGuardUntil=0;},{passive:true});
 $("readerScroll").addEventListener("wheel",function(){if(readerBook)restoreGuardUntil=0;},{passive:true});
 $("readerScroll").addEventListener("scroll",function(){
@@ -297,5 +307,6 @@ window.addEventListener("pagehide",function(){stopSpeech();});
 <script defer src="./book-parser.js?v=0.4.0"></script>
 <script defer src="./book-library.js?v=0.5.0"></script>
 <script defer src="./reader-bookmarks.js?v=0.5.0"></script>
+<script defer src="./reader-audio.js?v=0.6.0"></script>
 </body>
 </html>
