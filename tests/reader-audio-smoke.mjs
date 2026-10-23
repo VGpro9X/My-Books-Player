@@ -33,7 +33,7 @@ try {
  });
  if(!aligned.highlight||aligned.current!==9)throw Error("Timecoded highlight missing: "+JSON.stringify(aligned));
  console.log("PASS: audio cue highlights paragraph 9 and advances reading position");
- await page.locator("#audioPanelClose").click();
+ await page.locator("#audioClose").click();
  await page.locator("#nextChapter").click();
  const state=await page.evaluate(()=>({chapter:window.mbpReader.getState().chapter,audio:window.mbpAudio.getState()}));
  if(state.chapter!==27||state.audio.loaded)throw Error("Chapter switch did not unload previous audio: "+JSON.stringify(state));
