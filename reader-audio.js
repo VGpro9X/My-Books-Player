@@ -146,5 +146,5 @@ audio.onended=()=>{remember();status("Đã hết audio chương này. Chọn fil
 audio.onerror=()=>{status("Không phát được định dạng audio này trên Android/Chrome.");};
 window.addEventListener("mbp:auth-change",()=>{if(current?.isImported)closeReader();});
 window.addEventListener("pagehide",()=>remember());
-window.mbpAudio={adapters,open,close,onChapterChange:changedChapter,onReaderClose:closeReader,getMode:()=>mode,getState:()=>({loaded:!!url,chapter:current?.chapter||null,seconds:audio.currentTime,cues:cues.length})};
+window.mbpAudio={adapters,open,close,stopFile,onChapterChange:changedChapter,onReaderClose:closeReader,getMode:()=>mode,getState:()=>({loaded:!!url,chapter:current?.chapter||null,seconds:audio.currentTime,cues:cues.length})};
 })();
