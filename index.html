@@ -55,7 +55,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
  </div>
 </div>
 <div id="reader" class="reader" data-paper="paper" hidden>
- <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="readerBookmarksBtn" class="reader-icon" aria-label="Quản lý dấu trang" title="Dấu trang">♧</button><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
+ <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="readerBookmarksBtn" class="reader-icon" aria-label="Quản lý dấu trang" title="Dấu trang">🔖</button><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
  <div class="reader-scroll" id="readerScroll"><article class="reading-page" id="readingPage"></article></div>
  <div class="reader-toolbar"><button id="prevChapter">← Chương trước</button><span id="readerProgress">Chương 1 / 80</span><button id="nextChapter">Chương sau →</button></div>
 </div>
@@ -191,7 +191,7 @@ function openReader(id){
  }else{realChapters=null;present();}
  function present(){
   readerBook=b;
-  if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};if(!b.isImported)save("mbp_demo_progress",progress);}
+  if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};if(b.isImported)window.mbpSaveRealProgress?.(b.id,1,0);else save("mbp_demo_progress",progress);}
   var p=progress[b.id];if(p.chapter>b.total){p.chapter=b.total;p.para=0;}
   ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";
   applyPrefs();renderReader(true);restoreGuardUntil=Date.now()+1600;restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();
