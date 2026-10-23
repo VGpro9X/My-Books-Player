@@ -1,6 +1,17 @@
 # Changelog
 
-## v0.5.0 — Reader: dấu trang nhiều vị trí (CHỜ TEST)
+## v0.6.0 — Audio tích hợp Reader (CHỜ NGHIỆM THU)
+- Bước 05 được người dùng chấp thuận 8/8 mục.
+- Reader có nút ♫: chuyển giữa TTS tiếng Việt miễn phí và HTML Audio file MP3/WAV/M4A thực.
+- WAV tiếng bíp 60 giây sinh cục bộ để thử Android khóa màn hình; Media Session hỗ trợ play/pause/seek trong khả năng trình duyệt.
+- TTS Chrome tô sáng theo đoạn; MP3 có thể tô sáng theo đoạn nếu có JSON {chapter,cues:[{startMs,endMs,paragraph}]} chính xác.
+- Lưu audio_offset_ms cho từng sách và chương qua Supabase; file audio không được tải lên server và cần chọn lại trên thiết bị khác.
+- Không có API TTS trả phí, giọng do người dùng cung cấp sẽ tích hợp sau.
+- TTS trình duyệt chưa bảo đảm phát khi khóa màn hình; MP3 cũng chưa bảo đảm nếu Chrome bị Android tắt.
+- Chưa nghiệm thu bước 06 trên Android thực tế.
+
+
+## v0.5.0 — Reader: dấu trang nhiều vị trí (ĐÃ NGHIỆM THU 8/8)
 - Thêm nút 🔖 ngay trên thanh Reader.
 - Lưu nhiều dấu trang cho từng cuốn TXT/EPUB, kèm chương, số đoạn và trích đoạn nhận diện.
 - Mở danh sách, nhảy đến đoạn đã lưu, xóa dấu trang, đồng bộ qua Supabase theo owner_id với RLS.
