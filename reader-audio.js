@@ -86,7 +86,7 @@ function selectFile(blob,label){
  window.mbpReader?.stopTts?.();
  stopFile();url=URL.createObjectURL(blob);
  current={bookId:s.bookId,chapter:s.chapter,isImported:s.isImported};
- audio.src=url;audio.playbackRate=Number(get("audioSpeed").value);
+ audio.src=url;audio.loop=label==="Âm thử 60 giây";audio.playbackRate=Number(get("audioSpeed").value);
  restoreMs=resume(s);mediaSetup(s);
  status("Đã nạp "+label+". Nhấn Play để thử khóa màn hình."+(restoreMs?" Vị trí cũ: "+Math.round(restoreMs/1000)+" giây.":""));
 }
