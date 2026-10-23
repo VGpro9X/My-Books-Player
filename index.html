@@ -30,7 +30,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
   <div class="header-actions"><button id="testLink" class="icon-btn" title="Thử nghiệm audio" aria-label="Mở trang kiểm thử audio">♫</button><button id="themeBtn" class="icon-btn" title="Đổi giao diện sáng/tối" aria-label="Chuyển giao diện sáng tối">☼</button><button id="libraryBtn" class="header-pill">▣ &nbsp; Tủ sách</button><button id="accountBtn" class="profile" title="Đăng nhập / Đồng bộ cloud" aria-label="Tài khoản và đồng bộ cloud">☁</button></div>
  </div>
 </header>
-<div class="demo-ribbon">My Books Player v0.4 · Sách mẫu và sách TXT/EPUB riêng tư · Chờ bạn nghiệm thu.</div>
+<div class="demo-ribbon">My Books Player v0.5 · Dấu trang nhiều vị trí và tự lưu tiến độ · Chờ bạn nghiệm thu.</div>
 <section class="hero" aria-label="Sách nổi bật">
  <div class="shell hero-inner">
   <div><span class="eyebrow"><span class="dot"></span> ĐỀ XUẤT HÔM NAY · SÁCH MẪU</span><h1 id="heroTitle">Đường Về Qua Rừng Sao</h1><div class="author">✦ Tác giả: <strong id="heroAuthor">Phi Lam</strong></div><p class="hero-description" id="heroDescription">Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện.</p><div class="row-actions"><button id="heroRead" class="primary">Đọc ngay &nbsp; →</button><button id="heroListen" class="ghost">♫ &nbsp; Thử audio</button></div></div>
@@ -55,7 +55,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
  </div>
 </div>
 <div id="reader" class="reader" data-paper="paper" hidden>
- <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
+ <div class="reader-header"><button id="exitReader" class="reader-icon" aria-label="Quay lại thư viện">←</button><div class="reader-booktitle" id="readerTitle"></div><button id="readerBookmarksBtn" class="reader-icon" aria-label="Quản lý dấu trang" title="Dấu trang">♧</button><button id="tocBtn" class="reader-icon" aria-label="Chọn chương" title="Mục lục">☷</button><button id="settingsBtn" class="reader-icon" aria-label="Cài đặt đọc" title="Tùy chỉnh">Aa</button></div>
  <div class="reader-scroll" id="readerScroll"><article class="reading-page" id="readingPage"></article></div>
  <div class="reader-toolbar"><button id="prevChapter">← Chương trước</button><span id="readerProgress">Chương 1 / 80</span><button id="nextChapter">Chương sau →</button></div>
 </div>
@@ -97,7 +97,7 @@ var demoParagraphs=[
 "Phía sau những hàng cây, một cánh cổng nhỏ mở ra. Minh dừng bước trong giây lát, hít một hơi sâu rồi đi tiếp.",
 "Và thế là câu chuyện thực sự bắt đầu."
 ];
-var paragraphs=demoParagraphs,realChapters=null,openToken=0;
+var paragraphs=demoParagraphs,realChapters=null,openToken=0,readerScrollTimer=null,restoreGuardUntil=0;
 var $=function(id){return document.getElementById(id);};
 function escapeHtml(v){return String(v==null?"":v).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));}
 function load(key,fallback){try{var raw=localStorage.getItem(key);return raw?JSON.parse(raw):fallback;}catch(e){return fallback;}}
@@ -194,17 +194,17 @@ function openReader(id){
   if(!progress[b.id]||!progress[b.id].chapter){progress[b.id]={chapter:1,para:0};if(!b.isImported)save("mbp_demo_progress",progress);}
   var p=progress[b.id];if(p.chapter>b.total){p.chapter=b.total;p.para=0;}
   ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";
-  applyPrefs();renderReader(true);restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();
+  applyPrefs();renderReader(true);restoreGuardUntil=Date.now()+1600;restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();
  }
 }
 function closeReader(){
- ++openToken;stopSpeech();readerBook=null;realChapters=null;paragraphs=demoParagraphs;
+ ++openToken;clearTimeout(readerScrollTimer);window.mbpBookmarksClose?.();stopSpeech();readerBook=null;realChapters=null;paragraphs=demoParagraphs;
  $("reader").hidden=true;$("miniPlayer").classList.remove("visible");closeDrawer();document.body.style.overflow="";renderHome();
 }
-function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);}
+function chapterMove(delta){if(!readerBook)return;var p=progress[readerBook.id];var newChapter=p.chapter+delta;if(newChapter<1||newChapter>readerBook.total)return;clearTimeout(readerScrollTimer);stopSpeech();ttsIndex=0;savePosition(newChapter,0);renderReader(true);restoreGuardUntil=Date.now()+1100;}
 function markPara(i){
  if(!readerBook)return;
- var p=progress[readerBook.id];p.para=i;
+ var p=progress[readerBook.id];if(Number(p.para)===i)return;p.para=i;
  if(readerBook.isImported)window.mbpSaveRealProgress?.(readerBook.id,p.chapter,i);
  else save("mbp_demo_progress",progress);
  document.querySelectorAll("#readingPage p").forEach(function(x){x.classList.toggle("highlight",Number(x.dataset.para)===i);});
@@ -227,6 +227,24 @@ function playSpeech(){
 function gotoAudio(){stopSpeech();window.location.href="./audio-test.html";}
 function theme(){document.documentElement.dataset.theme=isDark?"dark":"light";$("themeBtn").textContent=isDark?"☀":"☼";}
 theme();renderHome();syncPlayer();
+window.mbpReader={
+ getState:function(){
+  if(!readerBook||$("reader").hidden)return null;
+  var p=progress[readerBook.id]||{chapter:1,para:0};
+  return {bookId:readerBook.id,title:readerBook.name,isImported:!!readerBook.isImported,
+   chapter:p.chapter,para:p.para,paragraphs:paragraphs.slice()};
+ },
+ navigate:function(ch,para){
+  if(!readerBook||!Number.isInteger(ch)||ch<1||ch>readerBook.total)return false;
+  clearTimeout(readerScrollTimer);stopSpeech();
+  var chapterParagraphs=readerBook.isImported?(realChapters?.[ch-1]?.paragraphs||[]):demoParagraphs;
+  var index=Math.max(0,Math.min(chapterParagraphs.length-1,Number(para)||0));
+  if(!Number.isFinite(index)||index<0)return false;
+  ttsIndex=index;savePosition(ch,index);renderReader(true);
+  restoreGuardUntil=Date.now()+1600;restoreMarkedParagraph(readerBook.id,ch,index);
+  return true;
+ }
+};
 window.mbpApp={
  setRealBooks:function(realBooks,realProgress){
   books=demoBooks.concat(realBooks);
@@ -237,6 +255,24 @@ window.mbpApp={
  closePrivateReader:function(){if(readerBook&&readerBook.isImported)closeReader();},
  notify:toast
 };
+$("readerBookmarksBtn").onclick=function(){window.mbpBookmarksOpen?.();};
+$("readerScroll").addEventListener("touchstart",function(){if(readerBook)restoreGuardUntil=0;},{passive:true});
+$("readerScroll").addEventListener("wheel",function(){if(readerBook)restoreGuardUntil=0;},{passive:true});
+$("readerScroll").addEventListener("scroll",function(){
+ if(!readerBook||ttsPlaying||Date.now()<restoreGuardUntil)return;
+ clearTimeout(readerScrollTimer);
+ readerScrollTimer=setTimeout(function(){
+  if(!readerBook||$("reader").hidden||ttsPlaying||Date.now()<restoreGuardUntil)return;
+  var pane=$("readerScroll"),area=pane.getBoundingClientRect(),items=$("readingPage").querySelectorAll("p[data-para]");
+  var line=area.top+Math.min(100,pane.clientHeight*.23),index=null;
+  for(var i=0;i<items.length;i++){
+   var rect=items[i].getBoundingClientRect();
+   if(rect.bottom>line){index=i;break;}
+  }
+  if(index===null&&items.length)index=items.length-1;
+  if(index!==null)markPara(index);
+ },900);
+},{passive:true});
 document.addEventListener("click",function(e){var saveBtn=e.target.closest("[data-save]"),openBtn=e.target.closest("[data-open]");if(saveBtn){toggleSave(saveBtn.dataset.save);return;}if(openBtn){openReader(openBtn.dataset.open);return;}var tabBtn=e.target.closest("[data-tab]");if(tabBtn){tab=tabBtn.dataset.tab;renderDialog();return;}var color=e.target.closest("[data-color]");if(color){prefs.paper=color.dataset.color;save("mbp_reader_prefs",prefs);applyPrefs();return;}var ch=e.target.closest("[data-chapter]");if(ch&&readerBook){stopSpeech();ttsIndex=0;savePosition(Number(ch.dataset.chapter),0);renderReader(true);closeDrawer();return;}if(e.target.hasAttribute("data-close-drawer"))closeDrawer();});
 $("search").addEventListener("input",function(){renderBooks();document.querySelector(".content").scrollIntoView({block:"start"});});
 document.querySelectorAll("[data-filter]").forEach(function(btn){btn.addEventListener("click",function(){filter=btn.dataset.filter;document.querySelectorAll("[data-filter]").forEach(function(x){x.classList.toggle("active",x===btn);});renderBooks();});});
@@ -259,6 +295,7 @@ window.addEventListener("pagehide",function(){stopSpeech();});
 <script defer src="./cloud.js?v=0.4.0"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script defer src="./book-parser.js?v=0.4.0"></script>
-<script defer src="./book-library.js?v=0.4.0"></script>
+<script defer src="./book-library.js?v=0.5.0"></script>
+<script defer src="./reader-bookmarks.js?v=0.5.0"></script>
 </body>
 </html>
