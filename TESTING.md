@@ -1,25 +1,38 @@
-# My Books Player v0.5 — Checklist Reader
+# My Books Player v0.6 — Bước 06: Nghe trong Reader
 
-Website: https://vgpro9x.github.io/My-Books-Player/?v=0.5.0
-Audio Test: https://vgpro9x.github.io/My-Books-Player/audio-test.html
+Website: https://vgpro9x.github.io/My-Books-Player/?v=0.6.0
+Audio Test cũ: https://vgpro9x.github.io/My-Books-Player/audio-test.html
 
-## Trên Android Chrome
-1. Đăng nhập bằng tài khoản Supabase đã kiểm tra ở v0.4, mở một TXT/EPUB **thật**.
-2. Ở Reader, chạm biểu tượng **🔖**, nhấn **＋ Lưu vị trí hiện tại**; xem danh sách có số chương, đoạn và đoạn trích.
-3. Chạm một đoạn khác (hoặc cuộn đến đoạn khác, đợi trên 1 giây), lưu thêm dấu trang thứ hai.
-4. Từ danh sách, bấm **↗ Đến đoạn** tại dấu trang trước đó; Reader phải nhảy đúng chương và đoạn.
-5. Xóa một dấu trang; xác nhận dấu còn lại không bị ảnh hưởng.
-6. Cuộn đọc khoảng vài đoạn **không chạm chữ**, dừng trên 2 giây. Đóng Reader, mở lại: phải nhảy đến vị trí vừa đọc.
-7. Tải lại website hoặc đăng xuất/đăng nhập lại: cả dấu trang và vị trí đọc sách thật vẫn còn.
-8. Nếu có thiết bị/trình duyệt thứ hai, đăng nhập cùng tài khoản: dấu trang phải xuất hiện ở máy thứ hai. Khi kiểm tra không nên sửa cùng một vị trí đồng thời.
-9. Thử dấu trang trên một **sách mẫu**: có thể lưu/nhảy nhưng chỉ lưu trên trình duyệt này.
-10. Kiểm tra các chức năng đã nghiệm thu: chọn chương, đổi font/nền, TTS đọc nội dung, Audio Test URL cũ.
+## Kiểm thử trên Android Chrome
+1. Đăng nhập tài khoản cũ, mở một sách TXT hoặc EPUB thật, kiểm tra nút **♫** trên đầu Reader.
+2. Mở ♫ → **TTS miễn phí** → Đọc. Nghe nội dung chương thật và quan sát đoạn đang đọc được tô sáng.
+3. Chuyển sang **Audio MP3/WAV**, chọn **Tạo WAV thử 60 giây**, bấm Play rồi khóa màn hình. Kiểm tra tối thiểu 5 phút và các nút Play/Pause khóa màn hình.
+4. Mở khóa, thử tua lùi/tiến 15 giây và điều chỉnh tốc độ phát.
+5. Chọn file MP3 có sẵn phù hợp với chương đang mở, phát rồi tạm dừng ở một vị trí. Đóng/mở lại Reader và chọn lại *cùng file*, xem có khôi phục vị trí nghe hay không.
+6. Nếu có JSON thời gian chính xác, chọn file ở mục **JSON thời gian**. Đoạn đang đọc phải tô sáng đúng theo cue; **không có JSON sẽ không tô sáng theo MP3**.
+7. Đang nghe file, đổi chương hoặc đóng Reader: audio cũ phải dừng, không tiếp tục đọc sai chương.
+8. Quay về chế độ TTS và thử lại dấu trang, mục lục, font/cỡ chữ, tự khôi phục vị trí.
+9. Đăng xuất và đăng nhập trên máy khác, chọn lại chính file MP3 phù hợp với chương, xác nhận offset đã được đồng bộ; file MP3 không tự theo tài khoản sang máy khác.
 
-## Cần chú ý
-- Dấu trang của **sách thật** được đồng bộ qua tài khoản Supabase, phải có Internet.
-- Dấu trang demo chỉ lưu localStorage.
-- Mỗi lần ngừng cuộn khoảng 900 ms thì Reader có thể cập nhật đoạn đang đọc; khi tự mở lại vị trí, ứng dụng tạm tránh ghi đè do cuộn tự động.
-- TTS trình duyệt vẫn có thể dừng khi Android khóa màn hình.
-- Chưa triển khai xung đột tiến độ khi mở đồng thời hai máy (mốc 07).
+## Ví dụ JSON mốc thời gian
+```json
+{
+  "chapter": 1,
+  "cues": [
+    {"startMs": 0, "endMs": 2500, "paragraph": 0},
+    {"startMs": 2500, "endMs": 6800, "paragraph": 1}
+  ]
+}
+```
 
-Bước 05 chỉ được chốt khi người dùng test và xác nhận.
+Trong đó chapter tính từ 1; paragraph tính từ 0; thời gian là mili-giây, các mốc không chồng lấn. Chỉ sử dụng mốc của audio và nội dung thực tế tương ứng.
+
+## Giới hạn minh bạch
+- TTS mặc định không xuất audio MP3, không bảo đảm chạy khi Android khóa màn hình.
+- Audio MP3/WAV là file thật nên khả năng phát nền tốt hơn, nhưng còn tùy Chrome, pin và xử lý ứng dụng nền của Android.
+- Audio không tự chuyển chương khi khóa màn hình. Chỉ file theo chương hiện tại, phải chọn lại khi reload/đổi thiết bị.
+- Tô sáng MP3 cần cue JSON phù hợp, không tự đoán đoạn từ thời gian.
+- Đồng bộ vị trí nghe và đọc theo sách/chương có mạng, chưa xử lý xung đột hai thiết bị cập nhật đồng thời (bước 07).
+- Giọng đọc do người dùng cung cấp sau; **không cần gửi giọng để nghiệm thu v0.6**.
+
+Đợi người dùng xác nhận từng bước trước khi mở mốc 07.
