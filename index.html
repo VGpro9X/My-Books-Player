@@ -32,7 +32,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
   <div class="header-actions"><button id="testLink" class="icon-btn" title="Thử nghiệm audio" aria-label="Mở trang kiểm thử audio">♫</button><button id="themeBtn" class="icon-btn" title="Đổi giao diện sáng/tối" aria-label="Chuyển giao diện sáng tối">☼</button><button id="libraryBtn" class="header-pill">▣ &nbsp; Tủ sách</button><button id="accountBtn" class="profile" title="Đăng nhập / Đồng bộ cloud" aria-label="Tài khoản và đồng bộ cloud">☁</button></div>
  </div>
 </header>
-<div class="demo-ribbon">My Books Player v0.6 · TTS và trình phát file audio trong Reader · Chờ bạn nghiệm thu.</div>
+<div class="demo-ribbon">My Books Player v0.7 · Lưu sách offline và xử lý xung đột đồng bộ · Chờ nghiệm thu.</div>
 <section class="hero" aria-label="Sách nổi bật">
  <div class="shell hero-inner">
   <div><span class="eyebrow"><span class="dot"></span> ĐỀ XUẤT HÔM NAY · SÁCH MẪU</span><h1 id="heroTitle">Đường Về Qua Rừng Sao</h1><div class="author">✦ Tác giả: <strong id="heroAuthor">Phi Lam</strong></div><p class="hero-description" id="heroDescription">Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện.</p><div class="row-actions"><button id="heroRead" class="primary">Đọc ngay &nbsp; →</button><button id="heroListen" class="ghost">♫ &nbsp; Thử audio</button></div></div>
@@ -197,6 +197,7 @@ function openReader(id){
   var p=progress[b.id];if(p.chapter>b.total){p.chapter=b.total;p.para=0;}
   ttsIndex=p.para||0;$("reader").hidden=false;$("miniPlayer").classList.add("visible");document.body.style.overflow="hidden";
   applyPrefs();renderReader(true);restoreGuardUntil=Date.now()+1600;restoreMarkedParagraph(b.id,p.chapter,p.para);syncPlayer();
+  window.dispatchEvent(new Event("mbp:book-open"));
  }
 }
 function closeReader(){
@@ -230,6 +231,7 @@ function gotoAudio(){stopSpeech();window.location.href="./audio-test.html";}
 function theme(){document.documentElement.dataset.theme=isDark?"dark":"light";$("themeBtn").textContent=isDark?"☀":"☼";}
 theme();renderHome();syncPlayer();
 window.mbpReader={
+ getChapters:function(){return readerBook?.isImported?realChapters:null;},
  toggleTts:playSpeech,
  stopTts:stopSpeech,
  setAudioParagraph:function(index){
@@ -257,6 +259,17 @@ window.mbpReader={
  }
 };
 window.mbpApp={
+ getBook:function(id){return bookById(id);},
+ applyRemoteProgress:function(id,chapter,para){
+  if(!bookById(id))return;
+  progress[id]={chapter:chapter,para:para};
+  if(readerBook?.id===id){
+   clearTimeout(readerScrollTimer);stopSpeech();
+   restoreGuardUntil=Date.now()+1600;
+   renderReader(true);restoreMarkedParagraph(id,chapter,para);
+  }
+  renderHome();
+ },
  setRealBooks:function(realBooks,realProgress){
   books=demoBooks.concat(realBooks);
   for(const key of Object.keys(progress)){if(key.length===36&&key.includes("-"))delete progress[key];}
@@ -310,5 +323,6 @@ window.addEventListener("pagehide",function(){stopSpeech();});
 <script defer src="./book-library.js?v=0.5.0"></script>
 <script defer src="./reader-bookmarks.js?v=0.5.0"></script>
 <script defer src="./reader-audio.js?v=0.6.0"></script>
+<script defer src="./reader-offline.js?v=0.7.0"></script>
 </body>
 </html>
