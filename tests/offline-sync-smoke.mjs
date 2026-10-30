@@ -39,7 +39,8 @@ try{
       getUser:()=>({id,email:"offline-test@example.invalid"}),
       getClient:()=>({from:()=>{throw Error("Network offline");}})
     };
-    await window.mbpRefreshBooks();
+    const before=await window.mbpOffline.listBooks(owner);
+    try{await window.mbpRefreshBooks();}catch(e){throw Error("refresh fallback failed; cached before="+before.length+" user="+window.mbpCloud.getUser()?.id+" error="+e.message);}
     if(!window.mbpApp.getBook(id))throw Error("Cached library book not listed when cloud fails.");
     window.mbpApp.openBook(id);
   },{id,owner});
