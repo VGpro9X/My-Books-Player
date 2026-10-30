@@ -24,3 +24,5 @@ jobs:
           node tests/book-parser-smoke.mjs
           node tests/reader-bookmarks-smoke.mjs
           node tests/reader-audio-smoke.mjs
+          node tests/offline-sync-smoke.mjs
+          node tests/progress-conflict-smoke.mjs
