@@ -36,7 +36,7 @@ try{
   // Simulate an authenticated account whose Supabase calls fail while a saved book exists.
   await page.evaluate(async({id,owner})=>{
     window.mbpCloud={
-      getUser:()=>({id,email:"offline-test@example.invalid"}),
+      getUser:()=>({id:owner,email:"offline-test@example.invalid"}),
       getClient:()=>({from:()=>{throw Error("Network offline");}})
     };
     const before=await window.mbpOffline.listBooks(owner);
