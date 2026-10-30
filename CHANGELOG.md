@@ -1,6 +1,18 @@
 # Changelog
 
-## v0.6.0 — Audio tích hợp Reader (CHỜ NGHIỆM THU)
+## v0.7.0 — Offline và phát hiện xung đột (CHỜ NGHIỆM THU)
+- Người dùng đã nghiệm thu v0.6 đạt 8/8.
+- Nút ↓ trong Reader lưu nội dung TXT/EPUB vào IndexedDB để đọc offline trên thiết bị đã chọn; ✓ dùng để xóa bản offline.
+- Service Worker lưu vỏ ứng dụng và JS public, không cần cài PWA/APK và không cache dữ liệu Supabase.
+- Dùng bản offline khi cloud không phản hồi; nhớ chương và đoạn đã đọc ngay cả sau khi đồng bộ online.
+- Lưu hàng đợi vị trí đọc vào IndexedDB nếu không có mạng, thử gửi lại khi online.
+- Supabase đã thêm trường revision + trigger trên reading_progress; lưu theo compare-and-swap; hỏi người dùng giữ máy hay cloud khi xung đột.
+- Dọn nội dung offline khi xóa sách hoặc đăng xuất; không tự tải toàn bộ thư viện.
+- Giới hạn: dữ liệu offline ở dạng rõ trong bộ nhớ trình duyệt; Chrome có thể dọn; MP3 chưa cache offline; bookmark/settings chưa xử lý xung đột.
+- CI Chromium kiểm tra mất mạng, hàng đợi, conflict; cần người dùng nghiệm thu Android thật.
+
+
+## v0.6.0 — Audio tích hợp Reader (ĐÃ NGHIỆM THU 8/8)
 - Bước 05 được người dùng chấp thuận 8/8 mục.
 - Reader có nút ♫: chuyển giữa TTS tiếng Việt miễn phí và HTML Audio file MP3/WAV/M4A thực.
 - WAV tiếng bíp 60 giây sinh cục bộ để thử Android khóa màn hình; Media Session hỗ trợ play/pause/seek trong khả năng trình duyệt.

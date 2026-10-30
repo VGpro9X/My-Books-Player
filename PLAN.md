@@ -9,8 +9,8 @@
 | 03 | Supabase, tài khoản và đồng bộ | Đã nghiệm thu 6/6 |
 | 04 | Import TXT/EPUB riêng tư, đọc, cloud | **Đã nghiệm thu 8/8** |
 | 05 | Reader: nhiều dấu trang, tự lưu vị trí khi cuộn, quay về dấu trang | **Đã nghiệm thu 8/8** |
-| 06 | Audio: TTS mặc định + file MP3/WAV, Media Session, cue tô sáng, lưu tiến độ nghe | **v0.6 đang kiểm thử và chờ nghiệm thu; chưa cần cung cấp giọng riêng** |
-| 07 | Offline và đồng bộ hai thiết bị có giải quyết xung đột | Chưa làm |
+| 06 | Audio: TTS mặc định, MP3/WAV, Media Session và vị trí nghe | **Đã nghiệm thu 8/8** |
+| 07 | Offline sách TXT/EPUB và xử lý xung đột tiến độ đọc | **Đã triển khai v0.7, chờ nghiệm thu Android** |
 | 08 | PWA, sao lưu và nghiệm thu v1 | Chưa làm |
 
 ### Phạm vi / quyết định cố định
@@ -32,3 +32,12 @@
 - Muốn highlight MP3 chính xác cần JSON cue thời gian; không đoán sai nếu thiếu cue.
 - Audio offset lưu theo sách/chương bằng Supabase reading_progress.audio_offset_ms.
 - Chưa có model giọng riêng hoặc sinh MP3 tự động từ TXT/EPUB; người dùng cung cấp giọng sau, không dùng API trả phí.
+
+### Bước 07
+- Offline qua Service Worker, chỉ cache vỏ website và thư viện JavaScript public; không cache Supabase API.
+- Chỉ lưu sách offline khi người dùng chủ động nhấn nút ↓ trong Reader.
+- IndexedDB lưu văn bản sách chưa mã hóa theo tài khoản và vị trí đọc, hàng đợi tiến độ tách riêng.
+- Đăng xuất và xóa sách sẽ dọn nội dung offline trên thiết bị.
+- Supabase reading_progress có revision và trigger tăng phiên bản; cập nhật CAS theo revision.
+- Khi xung đột: hỏi giữ vị trí trên máy hay trên cloud; không âm thầm ghi đè.
+- Chưa lưu audio MP3 offline; không có TTS trả phí hay APK.

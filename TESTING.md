@@ -1,38 +1,27 @@
-# My Books Player v0.6 — Bước 06: Nghe trong Reader
+# My Books Player v0.7 — Offline + Đồng bộ an toàn
 
-Website: https://vgpro9x.github.io/My-Books-Player/?v=0.6.0
-Audio Test cũ: https://vgpro9x.github.io/My-Books-Player/audio-test.html
+Website: https://vgpro9x.github.io/My-Books-Player/?v=0.7.0
+Audio Test: https://vgpro9x.github.io/My-Books-Player/audio-test.html
 
-## Kiểm thử trên Android Chrome
-1. Đăng nhập tài khoản cũ, mở một sách TXT hoặc EPUB thật, kiểm tra nút **♫** trên đầu Reader.
-2. Mở ♫ → **TTS miễn phí** → Đọc. Nghe nội dung chương thật và quan sát đoạn đang đọc được tô sáng.
-3. Chuyển sang **Audio MP3/WAV**, chọn **Tạo WAV thử 60 giây**, bấm Play rồi khóa màn hình. Kiểm tra tối thiểu 5 phút và các nút Play/Pause khóa màn hình.
-4. Mở khóa, thử tua lùi/tiến 15 giây và điều chỉnh tốc độ phát.
-5. Chọn file MP3 có sẵn phù hợp với chương đang mở, phát rồi tạm dừng ở một vị trí. Đóng/mở lại Reader và chọn lại *cùng file*, xem có khôi phục vị trí nghe hay không.
-6. Nếu có JSON thời gian chính xác, chọn file ở mục **JSON thời gian**. Đoạn đang đọc phải tô sáng đúng theo cue; **không có JSON sẽ không tô sáng theo MP3**.
-7. Đang nghe file, đổi chương hoặc đóng Reader: audio cũ phải dừng, không tiếp tục đọc sai chương.
-8. Quay về chế độ TTS và thử lại dấu trang, mục lục, font/cỡ chữ, tự khôi phục vị trí.
-9. Đăng xuất và đăng nhập trên máy khác, chọn lại chính file MP3 phù hợp với chương, xác nhận offset đã được đồng bộ; file MP3 không tự theo tài khoản sang máy khác.
+## Test trên Android
+1. Khi có mạng, đăng nhập và mở một TXT/EPUB đã lưu trên Supabase.
+2. Bấm nút ↓ trên thanh Reader. Đợi báo lưu thành công, nút chuyển thành ✓.
+3. Đóng sách; bật Chế độ máy bay (tắt cả Wi-Fi và dữ liệu di động). Tải lại chính URL website và mở lại sách đã lưu offline.
+4. Thử chuyển chương, cuộn đọc và đánh dấu; nội dung sách đã lưu phải mở được không cần mạng.
+5. Ở chế độ máy bay, dừng đọc ở đoạn gần cuối chương, đóng và mở lại; phải giữ được chương/đoạn trên máy.
+6. Bật mạng lại, bấm biểu tượng ☁ → Đồng bộ ngay. Trên trình duyệt/thiết bị khác đăng nhập cùng tài khoản và kiểm tra vị trí đã cập nhật.
+7. Để thử xung đột: mở cùng sách ở 2 thiết bị khi online. Cho A lưu một đoạn, sau đó B (chưa tải lại) lưu đoạn khác. Khi hộp thoại xung đột xuất hiện, thử lựa chọn giữ thiết bị hoặc cloud trên sách thử.
+8. Nhấn ✓ để xóa bản offline khỏi máy; xác nhận sách vẫn đọc online được từ Supabase.
+9. Lưu offline một sách thử lần nữa rồi đăng xuất; bản offline thuộc tài khoản phải được dọn khỏi thiết bị.
+10. Kiểm tra lại nhập TXT/EPUB, TTS, file MP3, dấu trang, font, chuyển chương và cuộn về vị trí đã lưu.
 
-## Ví dụ JSON mốc thời gian
-```json
-{
-  "chapter": 1,
-  "cues": [
-    {"startMs": 0, "endMs": 2500, "paragraph": 0},
-    {"startMs": 2500, "endMs": 6800, "paragraph": 1}
-  ]
-}
-```
+## Lưu ý quan trọng
+- Phải mở website thành công khi online trước khi thử offline; Service Worker không giúp mở website lần đầu khi không có mạng.
+- Nội dung offline nằm trong IndexedDB **không mã hóa**. Chỉ lưu trên thiết bị cá nhân có khóa màn hình; đừng dùng máy công cộng.
+- Xóa dữ liệu trang web trong Chrome hoặc hết quota lưu trữ có thể làm mất bản offline. Giữ file TXT/EPUB gốc để sao lưu.
+- Không có mạng thì không thể đăng nhập mới, upload sách, lấy sách chưa cache hoặc đồng bộ ngay.
+- Nếu phiên đăng nhập hết hạn, có thể cần kết nối mạng để xác thực lại.
+- Audio MP3 hiện không tự lưu offline; TTS trình duyệt vẫn không bảo đảm chạy khi Android khóa màn hình.
+- Xung đột chỉ áp dụng cho tiến độ chương/đoạn và thời điểm nghe trong reading_progress. Không áp dụng cho bookmark hoặc cài đặt.
 
-Trong đó chapter tính từ 1; paragraph tính từ 0; thời gian là mili-giây, các mốc không chồng lấn. Chỉ sử dụng mốc của audio và nội dung thực tế tương ứng.
-
-## Giới hạn minh bạch
-- TTS mặc định không xuất audio MP3, không bảo đảm chạy khi Android khóa màn hình.
-- Audio MP3/WAV là file thật nên khả năng phát nền tốt hơn, nhưng còn tùy Chrome, pin và xử lý ứng dụng nền của Android.
-- Audio không tự chuyển chương khi khóa màn hình. Chỉ file theo chương hiện tại, phải chọn lại khi reload/đổi thiết bị.
-- Tô sáng MP3 cần cue JSON phù hợp, không tự đoán đoạn từ thời gian.
-- Đồng bộ vị trí nghe và đọc theo sách/chương có mạng, chưa xử lý xung đột hai thiết bị cập nhật đồng thời (bước 07).
-- Giọng đọc do người dùng cung cấp sau; **không cần gửi giọng để nghiệm thu v0.6**.
-
-Đợi người dùng xác nhận từng bước trước khi mở mốc 07.
+**Bước 07 chỉ hoàn thành sau khi bạn test và xác nhận.**
