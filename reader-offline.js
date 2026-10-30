@@ -120,7 +120,7 @@ window.mbpOffline={
  saveBook:putBook,getBook,getChapters,listBooks,removeBook,clearOwner,
  pendingPut,pendingRemove,pendingList,refreshButton,isSupported:()=>!!window.indexedDB
 };
-if("serviceWorker" in navigator&&location.protocol==="https:"){
+if("serviceWorker" in navigator&&(location.protocol==="https:"||["localhost","127.0.0.1"].includes(location.hostname))){
  navigator.serviceWorker.register("./sw.js",{scope:"./"}).catch(()=>{});
 }
 })();
