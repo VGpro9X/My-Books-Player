@@ -15,9 +15,11 @@ try{
     const b=await app.getBook(owner,id);
     const list=await app.listBooks(owner);
     const content=await app.getChapters(owner,id);
+    await app.savePosition(owner,id,2,0);
+    const position=(await app.getBook(owner,id)).position;
     await app.pendingPut(owner,id,{chapter:2,para:0,ms:4000,userId:owner});
     const pending=await app.pendingList(owner);
-    return {cached:!!b&&b.book.id===id,listed:list.length===1,chapters:content?.length,pending:pending.length,privacy:(await app.listBooks("33333333-3333-4333-a333-333333333333")).length===0};
+    return {cached:!!b&&b.book.id===id,listed:list.length===1,chapters:content?.length,localPosition:position.chapter===2&&position.para===0,pending:pending.length,privacy:(await app.listBooks("33333333-3333-4333-a333-333333333333")).length===0};
   },{id,owner});
   for(const [k,v] of Object.entries(stored)){
    if(k==="chapters"?v!==2:v!==true&&k!=="pending"||k==="pending"&&v!==1)throw Error("Offline IndexedDB test failed: "+JSON.stringify(stored));
@@ -26,9 +28,10 @@ try{
   console.log("PASS: pending reading position queued offline in per-account store");
   await page.reload({waitUntil:"load"});
   const persist=await page.evaluate(async({id,owner})=>{
-   return {book:!!(await window.mbpOffline.getBook(owner,id)),pending:(await window.mbpOffline.pendingList(owner)).length};
+   const snapshot=await window.mbpOffline.getBook(owner,id);
+   return {book:!!snapshot,position:snapshot?.position?.chapter===2&&snapshot?.position?.para===0,pending:(await window.mbpOffline.pendingList(owner)).length};
   },{id,owner});
-  if(!persist.book||persist.pending!==1)throw Error("Cache did not survive reload: "+JSON.stringify(persist));
+  if(!persist.book||!persist.position||persist.pending!==1)throw Error("Cache did not survive reload: "+JSON.stringify(persist));
   console.log("PASS: offline cache and queued position survive page reload");
   // A real browser offline re-navigation must be served by the app-shell Service Worker.
   await page.evaluate(()=>navigator.serviceWorker?.ready);
