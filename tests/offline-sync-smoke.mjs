@@ -33,6 +33,21 @@ try{
   },{id,owner});
   if(!persist.book||!persist.position||persist.pending!==1)throw Error("Cache did not survive reload: "+JSON.stringify(persist));
   console.log("PASS: offline cache and queued position survive page reload");
+  // Simulate an authenticated account whose Supabase calls fail while a saved book exists.
+  await page.evaluate(async({id,owner})=>{
+    window.mbpCloud={
+      getUser:()=>({id,email:"offline-test@example.invalid"}),
+      getClient:()=>({from:()=>{throw Error("Network offline");}})
+    };
+    await window.mbpRefreshBooks();
+    if(!window.mbpApp.getBook(id))throw Error("Cached library book not listed when cloud fails.");
+    window.mbpApp.openBook(id);
+  },{id,owner});
+  await page.waitForFunction(()=>!document.querySelector("#reader").hidden&&document.querySelector("#readingPage").textContent.includes("Nội dung cuối"));
+  const positionRestored=await page.evaluate(()=>window.mbpReader.getState().chapter===2);
+  if(!positionRestored)throw Error("Integrated Reader didn't restore cached chapter 2.");
+  await page.locator("#exitReader").click();
+  console.log("PASS: private offline book opens in actual Reader at saved chapter without Supabase");
   // A real browser offline re-navigation must be served by the app-shell Service Worker.
   await page.evaluate(()=>navigator.serviceWorker?.ready);
   await page.waitForFunction(()=>!!navigator.serviceWorker?.controller,{timeout:15000});
