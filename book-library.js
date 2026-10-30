@@ -124,7 +124,9 @@ async function refresh(){
   if(!cached.length)throw err;
   records=cached.map(b=>({id:b.id,owner_id:owner,title:b.name,author:b.author,source_format:b.sourceFormat,
    source_filename:"Bản offline",object_path:"",size_bytes:0,metadata:{chapter_count:b.total}}));
-  const state={};for(const [id,value] of pendingPositions.entries())if(value.userId===owner)state[id]={chapter:value.chapter,para:value.para};
+  const state={};
+  for(const book of cached)if(book.offlinePosition)state[book.id]=book.offlinePosition;
+  for(const [id,value] of pendingPositions.entries())if(value.userId===owner)state[id]={chapter:value.chapter,para:value.para};
   window.mbpApp?.setRealBooks(cached,state);
   renderManage();
   window.mbpApp?.notify?.("Không có mạng: đang mở thư viện sách đã lưu offline.");
@@ -168,6 +170,7 @@ async function syncProgress(bookId,value){
  }else{
   audioResume.set(bookId,{chapter:row.chapter_index,ms:Number(row.audio_offset_ms)||0});
   window.mbpApp?.applyRemoteProgress?.(bookId,row.chapter_index,row.paragraph_index);
+  await window.mbpOffline?.savePosition(owner,bookId,row.chapter_index,row.paragraph_index).catch(()=>{});
   return "cloud";
  }
  return true;
@@ -197,6 +200,7 @@ window.mbpSaveRealProgress=(bookId,chapter,para)=>{
  const previous=audioResume.get(bookId),ms=previous?.chapter===chapter?previous.ms:0;
  const value={chapter,para,ms,userId:u.id,recordedAt:Date.now()};
  pendingPositions.set(bookId,value);
+ window.mbpOffline?.savePosition(u.id,bookId,chapter,para).catch(()=>{});
  const prior=pendingWrites.get(bookId)||Promise.resolve();
  const write=prior.catch(()=>{}).then(()=>window.mbpOffline?.pendingPut(u.id,bookId,value));
  pendingWrites.set(bookId,write.catch(()=>{}));
