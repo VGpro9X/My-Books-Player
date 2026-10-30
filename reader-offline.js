@@ -3,7 +3,7 @@
  * Book contents are plaintext in per-account IndexedDB on THIS device. */
 (() => {
 "use strict";
-const DB="my-books-offline-v1", VERSION=1;
+const DB="my-books-offline-v1", VERSION=2;
 let opened=null;
 function dbOpen(){
  if(!("indexedDB" in window))return Promise.reject(Error("Trình duyệt không hỗ trợ IndexedDB."));
@@ -13,6 +13,7 @@ function dbOpen(){
   r.onupgradeneeded=()=>{const db=r.result;
    if(!db.objectStoreNames.contains("books"))db.createObjectStore("books",{keyPath:"key"});
    if(!db.objectStoreNames.contains("pending"))db.createObjectStore("pending",{keyPath:"key"});
+   if(!db.objectStoreNames.contains("positions"))db.createObjectStore("positions",{keyPath:"key"});
   };
   r.onsuccess=()=>resolve(r.result);
   r.onerror=()=>reject(r.error||Error("Không mở được bộ nhớ offline."));
@@ -47,26 +48,38 @@ async function putBook(owner,book,chapters){
  const reading=window.mbpReader?.getState?.();
  const position=reading?.bookId===book.id?{chapter:reading.chapter,para:reading.para}:{chapter:1,para:0};
  await transact("books","readwrite",s=>s.put({key:key(owner,book.id),owner,book:info,chapters,position,savedAt:Date.now()}));
+ await transact("positions","readwrite",s=>s.put({key:key(owner,book.id),owner,position}));
  return info;
 }
-const getBook=(owner,id)=>transact("books","readonly",s=>s.get(key(owner,id)));
+async function getBook(owner,id){
+ const book=await transact("books","readonly",s=>s.get(key(owner,id)));
+ if(!book)return null;
+ const p=await transact("positions","readonly",s=>s.get(key(owner,id)));
+ return {...book,position:p?.position||book.position||{chapter:1,para:0}};
+}
 async function listBooks(owner){
  if(!owner)return [];
- const all=await transact("books","readonly",s=>s.getAll());
- return (all||[]).filter(x=>x.owner===owner).map(x=>({...x.book,offlinePosition:x.position||{chapter:1,para:0}}));
+ const [all,rows]=await Promise.all([
+  transact("books","readonly",s=>s.getAll()),
+  transact("positions","readonly",s=>s.getAll())
+ ]);
+ const positions=new Map((rows||[]).filter(x=>x.owner===owner).map(x=>[x.key,x.position]));
+ return (all||[]).filter(x=>x.owner===owner).map(x=>({
+  ...x.book,offlinePosition:positions.get(x.key)||x.position||{chapter:1,para:0}
+ }));
 }
 async function getChapters(owner,id){
- const item=await getBook(owner,id);return item?.chapters||null;
+ const book=await transact("books","readonly",s=>s.get(key(owner,id)));
+ return book?.chapters||null;
 }
-const removeBook=(owner,id)=>transact("books","readwrite",s=>s.delete(key(owner,id)));
+async function removeBook(owner,id){
+ await Promise.all(["books","positions"].map(store=>transact(store,"readwrite",s=>s.delete(key(owner,id)))));
+}
 async function savePosition(owner,id,chapter,para){
  if(!owner||!Number.isInteger(chapter)||chapter<1||!Number.isInteger(para)||para<0)return;
- const cached=await getBook(owner,id);
- if(!cached)return;
- cached.position={chapter,para};
- await transact("books","readwrite",s=>s.put(cached));
+ // Only this tiny record changes; never rewrite every chapter when user scrolls.
+ await transact("positions","readwrite",s=>s.put({key:key(owner,id),owner,position:{chapter,para}}));
 }
-
 const pendingPut=(owner,id,payload)=>transact("pending","readwrite",s=>s.put({key:key(owner,id),owner,bookId:id,entry:payload,savedAt:Date.now()}));
 const pendingRemove=(owner,id)=>transact("pending","readwrite",s=>s.delete(key(owner,id)));
 const pendingList=async owner=>{
@@ -75,7 +88,7 @@ const pendingList=async owner=>{
 };
 async function clearOwner(owner){
  if(!owner)return;
- for(const store of ["books","pending"]){
+ for(const store of ["books","pending","positions"]){
   const rows=await transact(store,"readonly",s=>s.getAll());
   await Promise.all((rows||[]).filter(x=>x.owner===owner).map(x=>transact(store,"readwrite",s=>s.delete(x.key))));
  }
