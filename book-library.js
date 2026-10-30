@@ -255,6 +255,11 @@ async function deleteBook(id){
   const result=await sb.from("books").delete().eq("id",id).eq("owner_id",u.id);
   if(result.error)throw result.error;
   parsedCache.delete(id);
+  pendingPositions.delete(id);audioResume.delete(id);versions.delete(id);
+  if(savingTimers.has(id))clearTimeout(savingTimers.get(id));savingTimers.delete(id);
+  await window.mbpOffline?.removeBook(u.id,id).catch(()=>{});
+  await window.mbpOffline?.pendingRemove(u.id,id).catch(()=>{});
+  window.mbpApp?.closePrivateReader?.();
   await refresh();
   const remove=await sb.storage.from(BUCKET).remove([r.object_path]);
   if(remove.error)window.mbpApp?.notify?.("Đã xóa mục sách, nhưng file cũ có thể chưa được dọn khỏi Storage.");
