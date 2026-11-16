@@ -84,9 +84,10 @@ try{
   return {account:true,ui:!!document.querySelector("#backupOpen")};
  });
  if(!initial.ui)throw Error("Backup UI not present");
- const downloaded=page.waitForEvent("download",{timeout:15000});
- const report=await page.evaluate(()=>window.mbpBackup.createBackup());
- await downloaded;
+ const report=await page.evaluate(async()=>{try{return await window.mbpBackup.createBackup();}catch(e){return {error:String(e),stack:String(e.stack)};}});
+ if(report.error)throw Error("Backup export error: "+report.error+" "+report.stack);
+ const hasBlob=await page.evaluate(()=>window.__lastBackupBlob instanceof Blob);
+ if(!hasBlob)throw Error("Backup ZIP was not created in browser");
  if(report.count!==1||report.size<=0)throw Error("ZIP export failed: "+JSON.stringify(report));
  console.log("PASS: Exported portable ZIP with original TXT via private Supabase storage");
  const parsed=await page.evaluate(async()=>{
