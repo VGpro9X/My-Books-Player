@@ -56,7 +56,7 @@ function checkFormat(data){
  for(const [i,b] of data.books.entries()){
   if(!b||!["txt","epub"].includes(b.source_format)||!validText(b.title,180)||!b.title.trim()||
      !validText(b.author||"",120)||!validText(b.source_filename||"",250)||
-     !validText(b.archivePath,160)||!/^sources\/[a-f0-9-]{36}\.(txt|epub)$/.test(b.archivePath)||
+     !validText(b.archivePath,160)||!/^sources\/[a-f0-9-]{36}\.(txt|epub)$/.test(b.archivePath)||!b.archivePath.endsWith("."+b.source_format)||
      !Number.isSafeInteger(b.size_bytes)||b.size_bytes<=0||b.size_bytes>MAX_SOURCE)throw Error("Metadata sách thứ "+(i+1)+" không hợp lệ.");
   if(paths.has(b.archivePath))throw Error("Có file sách trùng trong gói sao lưu.");
   paths.add(b.archivePath);
@@ -82,7 +82,7 @@ function checkFormat(data){
 async function pages(db,table,fields,owner){
  const all=[];
  for(let from=0;from<=10000;from+=100){
-  const response=await db.from(table).select(fields).eq("owner_id",owner).range(from,from+99);
+  const response=await db.from(table).select(fields).eq("owner_id",owner).order(table==="reading_progress"?"book_id":"id").range(from,from+99);
   if(response.error)throw response.error;
   const part=response.data||[];
   all.push(...part);
@@ -103,7 +103,7 @@ async function snapshot(){
  const index=new Map(progress.map(p=>[p.book_id,p])), grouped=new Map();
  for(const b of books)grouped.set(b.id,[]);
  for(const m of marks)grouped.get(m.book_id)?.push({
-  chapter_index:m.chapter_index,paragraph_index:m.paragraph_index,label:m.label||""
+  chapter_index:m.chapter_index,paragraph_index:Math.max(0,Math.min(m.paragraph_index,(parsed.chapters[Math.min(m.chapter_index,parsed.chapters.length)-1]?.paragraphs.length||1)-1)),label:m.label||""
  });
  const bookList=books.map(b=>({
   id:b.id,title:b.title,author:b.author||"",source_format:b.source_format,
@@ -212,7 +212,7 @@ async function restore(preview,withSettings){
     const p=b.progress;
     const res=await db.from("reading_progress").upsert({
      owner_id:owner,book_id:id,chapter_index:Math.min(p.chapter_index,parsed.chapters.length),
-     paragraph_index:p.paragraph_index,audio_offset_ms:p.audio_offset_ms,
+     paragraph_index:Math.max(0,Math.min(p.paragraph_index,(parsed.chapters[Math.min(p.chapter_index,parsed.chapters.length)-1]?.paragraphs.length||1)-1)),audio_offset_ms:p.audio_offset_ms,
      updated_at:new Date().toISOString()
     },{onConflict:"owner_id,book_id"});
     if(res.error)throw res.error;
