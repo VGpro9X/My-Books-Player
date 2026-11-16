@@ -103,7 +103,7 @@ async function snapshot(){
  const index=new Map(progress.map(p=>[p.book_id,p])), grouped=new Map();
  for(const b of books)grouped.set(b.id,[]);
  for(const m of marks)grouped.get(m.book_id)?.push({
-  chapter_index:m.chapter_index,paragraph_index:Math.max(0,Math.min(m.paragraph_index,(parsed.chapters[Math.min(m.chapter_index,parsed.chapters.length)-1]?.paragraphs.length||1)-1)),label:m.label||""
+  chapter_index:m.chapter_index,paragraph_index:m.paragraph_index,label:m.label||""
  });
  const bookList=books.map(b=>({
   id:b.id,title:b.title,author:b.author||"",source_format:b.source_format,
