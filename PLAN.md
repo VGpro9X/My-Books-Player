@@ -10,8 +10,8 @@
 | 04 | Import TXT/EPUB riêng tư, đọc, cloud | **Đã nghiệm thu 8/8** |
 | 05 | Reader: nhiều dấu trang, tự lưu vị trí khi cuộn, quay về dấu trang | **Đã nghiệm thu 8/8** |
 | 06 | Audio: TTS mặc định, MP3/WAV, Media Session và vị trí nghe | **Đã nghiệm thu 8/8** |
-| 07 | Offline sách TXT/EPUB và xử lý xung đột tiến độ đọc | **Đã triển khai v0.7, chờ nghiệm thu Android** |
-| 08 | PWA, sao lưu và nghiệm thu v1 | Chưa làm |
+| 07 | Offline sách TXT/EPUB và xử lý xung đột tiến độ đọc | **Đã nghiệm thu 8/8** |
+| 08 | Sao lưu/khôi phục, tối ưu và đánh giá phát hành v1 (chỉ URL) | **v0.8 đã triển khai, chờ CI và nghiệm thu Android** |
 
 ### Phạm vi / quyết định cố định
 - **Chỉ URL GitHub Pages**, không APK; ưu tiên Chrome Android.
@@ -41,3 +41,12 @@
 - Supabase reading_progress có revision và trigger tăng phiên bản; cập nhật CAS theo revision.
 - Khi xung đột: hỏi giữ vị trí trên máy hay trên cloud; không âm thầm ghi đè.
 - Chưa lưu audio MP3 offline; không có TTS trả phí hay APK.
+
+### Phạm vi bước 08 (URL website, không cài APK/PWA)
+- Xuất ZIP cá nhân chứa file TXT/EPUB gốc, tiến độ chương/đoạn, offset nghe, dấu trang và cài đặt đọc.
+- Nhập ZIP tạo các bản sách **mới**, không xóa hay ghi đè sách cloud đang có; cài đặt chỉ được phục hồi nếu tích chọn.
+- ZIP chưa mã hóa, chỉ nên lưu ở nơi an toàn. Không bao gồm mật khẩu/token; không sao lưu âm thanh MP3 hay cache offline.
+- Giới hạn một lần: tối đa 300 cuốn, 20 MB/cuốn, 160 MB tổng file sách; ZIP tối đa 190 MB. Sao lưu yêu cầu mạng.
+- Tối ưu 2 chỉ mục foreign key để truy vấn/xóa sách riêng tư hiệu quả hơn.
+- Chỉ cache ứng dụng công khai qua Service Worker; tuyệt đối không cache API private.
+- v1 chỉ có thể chốt khi người dùng nghiệm thu cả chức năng và xác nhận phạm vi. TTS từ giọng do người dùng gửi và phát liên tục audio tự sinh khi khóa màn hình vẫn **chưa hoàn thành**.

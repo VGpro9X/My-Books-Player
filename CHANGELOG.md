@@ -1,6 +1,20 @@
 # Changelog
 
-## v0.7.0 — Offline và phát hiện xung đột (CHỜ NGHIỆM THU)
+## v0.8.0 — Sao lưu ZIP, khôi phục không ghi đè, chuẩn bị v1 (CHỜ NGHIỆM THU)
+- Người dùng nghiệm thu bước 07 đạt 8/8.
+- Thêm "Sao lưu / Khôi phục" ngay trong cửa sổ tài khoản cloud.
+- ZIP chứa bản TXT/EPUB gốc theo từng sách, chapter/paragraph, audio_offset_ms, dấu trang và tùy chọn cài đặt.
+- Khi khôi phục tạo UUID mới cho từng cuốn, tái gắn dấu trang và tiến độ, không xóa sách hiện có; kiểm tra định dạng/ZIP và chặn đường dẫn nguy hiểm.
+- Không chứa mật khẩu/token trong ZIP. File ZIP **không mã hóa**, phải giữ kín. Audio MP3 và cache offline không nằm trong gói.
+- Giới hạn: 300 cuốn, 20 MB/cuốn, tổng 160 MB, file ZIP 190 MB. Backup/restore cần mạng và đăng nhập.
+- Service Worker bổ sung mã backup trong app shell, vẫn dùng URL không cần cài PWA/APK.
+- Bổ sung 2 chỉ mục Supabase FK (book_id,owner_id) an toàn, không thay đổi dữ liệu người dùng.
+- Security Advisor còn cảnh báo Leaked Password Protection Disabled; cần xem Dashboard Supabase.
+- Chưa có TTS tự sinh audio bằng giọng riêng từ sách; không được coi là đã hoàn thiện tiêu chí phát audio tự sinh liên tục khi khóa màn hình.
+- CI đang chạy, Android thực tế chưa nghiệm thu; không tự tuyên bố v1 hoàn tất.
+
+
+## v0.7.0 — Offline và phát hiện xung đột (ĐÃ NGHIỆM THU 8/8)
 - Người dùng đã nghiệm thu v0.6 đạt 8/8.
 - Nút ↓ trong Reader lưu nội dung TXT/EPUB vào IndexedDB để đọc offline trên thiết bị đã chọn; ✓ dùng để xóa bản offline.
 - Service Worker lưu vỏ ứng dụng và JS public, không cần cài PWA/APK và không cache dữ liệu Supabase.
