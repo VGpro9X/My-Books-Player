@@ -220,7 +220,7 @@ async function restore(preview,withSettings){
    if(b.bookmarks.length){
     const data=b.bookmarks.map(m=>({
      owner_id:owner,book_id:id,chapter_index:Math.min(m.chapter_index,parsed.chapters.length),
-     paragraph_index:m.paragraph_index,label:m.label
+     paragraph_index:Math.max(0,Math.min(m.paragraph_index,(parsed.chapters[Math.min(m.chapter_index,parsed.chapters.length)-1]?.paragraphs.length||1)-1)),label:m.label
     }));
     for(let j=0;j<data.length;j+=100){
      const res=await db.from("bookmarks").insert(data.slice(j,j+100));
