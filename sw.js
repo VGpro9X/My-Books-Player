@@ -2,10 +2,10 @@
  * Never cache Supabase API, user audio, or private book content.
  * Books themselves are opt-in in IndexedDB via reader-offline.js.
  */
-const CACHE="my-books-shell-0.7.0";
+const CACHE="my-books-shell-0.8.0";
 const root=new URL("./",self.location).pathname;
 const files=["","index.html","cloud.js","book-parser.js","book-library.js",
- "reader-bookmarks.js","reader-audio.js","reader-offline.js"];
+ "reader-bookmarks.js","reader-audio.js","reader-offline.js","backup.js"];
 const cdn=[
  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/dist/umd/supabase.min.js",
  "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
