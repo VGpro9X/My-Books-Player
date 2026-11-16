@@ -26,3 +26,4 @@ jobs:
           node tests/reader-audio-smoke.mjs
           node tests/offline-sync-smoke.mjs
           node tests/progress-conflict-smoke.mjs
+          node tests/backup-restore-smoke.mjs
