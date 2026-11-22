@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0 — Sao lưu ZIP, khôi phục không ghi đè, chuẩn bị v1 (CHỜ NGHIỆM THU)
+## v0.8.0 — Sao lưu ZIP, khôi phục không ghi đè, chuẩn bị v1 (ĐÃ NGHIỆM THU 8/8 — 22/11/2026)
 - Người dùng nghiệm thu bước 07 đạt 8/8.
 - Thêm "Sao lưu / Khôi phục" ngay trong cửa sổ tài khoản cloud.
 - ZIP chứa bản TXT/EPUB gốc theo từng sách, chapter/paragraph, audio_offset_ms, dấu trang và tùy chọn cài đặt.
@@ -11,7 +11,8 @@
 - Bổ sung 2 chỉ mục Supabase FK (book_id,owner_id) an toàn, không thay đổi dữ liệu người dùng.
 - Security Advisor còn cảnh báo Leaked Password Protection Disabled; cần xem Dashboard Supabase.
 - Chưa có TTS tự sinh audio bằng giọng riêng từ sách; không được coi là đã hoàn thiện tiêu chí phát audio tự sinh liên tục khi khóa màn hình.
-- CI đang chạy, Android thực tế chưa nghiệm thu; không tự tuyên bố v1 hoàn tất.
+- Kiểm thử tự động thành công; người dùng xác nhận Android v0.8 đạt **8/8**. Toàn bộ 8 bước đã được nghiệm thu.
+- Trạng thái: **v0.8 ổn định theo nghiệm thu**, chưa đánh dấu v1.0 đủ mọi yêu cầu vì chưa có giọng TTS riêng và quy trình tạo audio tự động để nghe khi khóa màn hình.
 
 
 ## v0.7.0 — Offline và phát hiện xung đột (ĐÃ NGHIỆM THU 8/8)

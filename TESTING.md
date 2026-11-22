@@ -20,4 +20,5 @@ Website: https://vgpro9x.github.io/My-Books-Player/?v=0.8.0
 - Khôi phục gián đoạn có thể để lại các cuốn **đã nhập thành công** trước khi lỗi; không xóa cuốn đang có. Ghi nhận số cuốn đã thêm trước khi lỗi.
 - Trình duyệt có thể thiếu bộ nhớ khi tải ZIP gần giới hạn (tổng sách 160 MB, ZIP 190 MB).
 - Giọng do bạn cung cấp và sinh audio tự động từ TXT/EPUB để nghe liên tục khi khóa màn hình chưa được tích hợp. Không đánh dấu chức năng đó là đạt.
-- Bước 08 chỉ đóng sau khi bạn nghiệm thu. Nếu cần phát hành v1 đủ các tiêu chí ban đầu thì tính năng TTS khi khóa màn hình vẫn cần xử lý tiếp.
+- **Đã nghiệm thu:** người dùng xác nhận v0.8 đạt **8/8** vào **22/11/2026**. Các bước 01–08 được chốt trong phạm vi đã triển khai.
+- Nếu cần v1 đáp ứng đủ mục tiêu ban đầu, vẫn cần tích hợp giọng TTS người dùng cung cấp và sinh audio tự động để nghe liên tục khi khóa màn hình.

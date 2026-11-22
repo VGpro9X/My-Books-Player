@@ -11,7 +11,13 @@
 | 05 | Reader: nhiều dấu trang, tự lưu vị trí khi cuộn, quay về dấu trang | **Đã nghiệm thu 8/8** |
 | 06 | Audio: TTS mặc định, MP3/WAV, Media Session và vị trí nghe | **Đã nghiệm thu 8/8** |
 | 07 | Offline sách TXT/EPUB và xử lý xung đột tiến độ đọc | **Đã nghiệm thu 8/8** |
-| 08 | Sao lưu/khôi phục, tối ưu và đánh giá phát hành v1 (chỉ URL) | **v0.8 đã triển khai, chờ CI và nghiệm thu Android** |
+| 08 | Sao lưu/khôi phục, tối ưu và đánh giá phát hành v1 (chỉ URL) | **Đã nghiệm thu 8/8** |
+
+### Trạng thái sau nghiệm thu v0.8 — 22/11/2026
+- **Cả 8 mốc đã được người dùng nghiệm thu**, bước 08 đạt 8/8 trên Android theo báo cáo của người dùng.
+- Bản ổn định: **v0.8.0**, URL https://vgpro9x.github.io/My-Books-Player/.
+- **Chưa gọi v1.0 hoàn chỉnh** vì chưa tích hợp bộ giọng TTS do người dùng cung cấp để tự sinh audio từ TXT/EPUB và phát liên tục khi khóa màn hình.
+- Chờ người dùng yêu cầu mốc tiếp theo hoặc cung cấp giọng; vẫn chỉ URL, không APK, không API TTS tính phí.
 
 ### Phạm vi / quyết định cố định
 - **Chỉ URL GitHub Pages**, không APK; ưu tiên Chrome Android.
@@ -49,4 +55,4 @@
 - Giới hạn một lần: tối đa 300 cuốn, 20 MB/cuốn, 160 MB tổng file sách; ZIP tối đa 190 MB. Sao lưu yêu cầu mạng.
 - Tối ưu 2 chỉ mục foreign key để truy vấn/xóa sách riêng tư hiệu quả hơn.
 - Chỉ cache ứng dụng công khai qua Service Worker; tuyệt đối không cache API private.
-- v1 chỉ có thể chốt khi người dùng nghiệm thu cả chức năng và xác nhận phạm vi. TTS từ giọng do người dùng gửi và phát liên tục audio tự sinh khi khóa màn hình vẫn **chưa hoàn thành**.
+- Bước 08 đã nghiệm thu 8/8. Yêu cầu tự tạo audio bằng giọng người dùng và nghe liên tục khi khóa màn hình vẫn **chưa hoàn thành**, nên chưa công bố v1 đầy đủ.

@@ -12,8 +12,9 @@
 - v0.5: nhiều dấu trang, tự lưu tiến độ Reader (8/8).
 - v0.6: TTS mặc định và trình phát MP3/WAV trong Reader, Media Session (8/8).
 - v0.7: lưu offline chọn lọc, đồng bộ tiến độ và xử lý xung đột (8/8).
+- **v0.8: sao lưu/khôi phục ZIP và rà soát bảo mật, hiệu năng (8/8, nghiệm thu 22/11/2026).**
 
-## v0.8 — Sao lưu/Khôi phục, đang chờ nghiệm thu
+## v0.8 — Sao lưu/Khôi phục (đã nghiệm thu 8/8)
 1. Đăng nhập bằng biểu tượng ☁.
 2. Chọn **Sao lưu / Khôi phục** trong cửa sổ tài khoản.
 3. Nhấn **Sao lưu toàn bộ thư viện** để tải ZIP về máy (sách gốc, bookmark, tiến độ và cài đặt).
@@ -27,6 +28,6 @@ Gói ZIP chưa mã hóa, không chứa mật khẩu hay token. Chỉ lưu nơi r
 - Không lưu MP3 trong offline hoặc ZIP backup; bản offline lưu dạng văn bản rõ trong IndexedDB.
 - EPUB phức tạp, DRM, ảnh/bảng/kiểu chữ chưa hỗ trợ đầy đủ.
 - Dung lượng sao lưu trong trình duyệt có hạn: tối đa 300 cuốn, 20 MB/cuốn, tổng 160 MB sách, ZIP tối đa 190 MB.
-- v0.8 chưa được nghiệm thu; không gọi v1.0 là hoàn thành trước khi khép toàn bộ các tiêu chí còn thiếu.
+- Cả 8 mốc đã nghiệm thu. Bản hiện tại là **v0.8.0 ổn định**. Chưa gắn nhãn v1.0 đầy đủ: còn chờ tích hợp giọng TTS người dùng cung cấp và tạo/phát audio tự động khi khóa màn hình.
 
 Xem [PLAN.md](PLAN.md), [TESTING.md](TESTING.md), [CHANGELOG.md](CHANGELOG.md), [VOICE_INTEGRATION.md](VOICE_INTEGRATION.md).
