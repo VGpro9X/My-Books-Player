@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.0 — Adapter giọng Nghe Epub (ỨNG VIÊN)
+- Thêm catalog public 10 gói/97 speaker, giữ đúng tên và thứ tự speaker của Nghe Epub 2.1.6.
+- Thêm adapter HTTPS `/api/tts/voices` và `/api/tts/synthesize`, kiểm tra endpoint, kiểu audio và giới hạn 150 MB.
+- Reader có chế độ Nghe Epub để chọn gói, speaker, tốc độ và tạo WAV từ đoạn hiện tại đến hết chương.
+- Audio sinh ra dùng player và Media Session hiện có; endpoint/lựa chọn lưu local, nội dung chỉ gửi khi người dùng chủ động tạo.
+- Không commit model/archive/runtime premium vào repo public. Cần backend Piper/NCNN HTTPS và CORS trước khi dùng thật.
+- Bổ sung smoke test giả lập backend; toàn bộ hồi quy Reader, import, bookmark, offline, conflict và backup đều đạt.
+
 ## v0.8.0 — Sao lưu ZIP, khôi phục không ghi đè, chuẩn bị v1 (ĐÃ NGHIỆM THU 8/8 — 22/11/2026)
 - Người dùng nghiệm thu bước 07 đạt 8/8.
 - Thêm "Sao lưu / Khôi phục" ngay trong cửa sổ tài khoản cloud.

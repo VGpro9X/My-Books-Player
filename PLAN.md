@@ -12,12 +12,14 @@
 | 06 | Audio: TTS mặc định, MP3/WAV, Media Session và vị trí nghe | **Đã nghiệm thu 8/8** |
 | 07 | Offline sách TXT/EPUB và xử lý xung đột tiến độ đọc | **Đã nghiệm thu 8/8** |
 | 08 | Sao lưu/khôi phục, tối ưu và đánh giá phát hành v1 (chỉ URL) | **Đã nghiệm thu 8/8** |
+| 09 | Catalog Nghe Epub, adapter HTTPS và sinh WAV theo chương | **Đã code/test client; chờ backend + nghiệm thu Android** |
 
 ### Trạng thái sau nghiệm thu v0.8 — 22/11/2026
 - **Cả 8 mốc đã được người dùng nghiệm thu**, bước 08 đạt 8/8 trên Android theo báo cáo của người dùng.
 - Bản ổn định: **v0.8.0**, URL https://vgpro9x.github.io/My-Books-Player/.
-- **Chưa gọi v1.0 hoàn chỉnh** vì chưa tích hợp bộ giọng TTS do người dùng cung cấp để tự sinh audio từ TXT/EPUB và phát liên tục khi khóa màn hình.
-- Chờ người dùng yêu cầu mốc tiếp theo hoặc cung cấp giọng; vẫn chỉ URL, không APK, không API TTS tính phí.
+- **Chưa gọi v1.0 hoàn chỉnh**: client đã tích hợp bộ giọng, nhưng còn cần endpoint Piper/NCNN thật và nghiệm thu phát khi khóa màn hình Android.
+- Tiếp tục giữ mô hình chỉ-URL, không APK và không nhúng API key hoặc model premium vào repo public.
+- Bộ giọng đã được nối ở lớp client trong v0.9. Backend Piper/NCNN HTTPS vẫn là điều kiện để sinh WAV thật; model Android không được đưa lên GitHub Pages.
 
 ### Phạm vi / quyết định cố định
 - **Chỉ URL GitHub Pages**, không APK; ưu tiên Chrome Android.

@@ -32,7 +32,7 @@ html[data-theme="dark"]{--bg:#131318;--surface:#211f27;--fg:#f3eff4;--muted:#aba
   <div class="header-actions"><button id="testLink" class="icon-btn" title="Thử nghiệm audio" aria-label="Mở trang kiểm thử audio">♫</button><button id="themeBtn" class="icon-btn" title="Đổi giao diện sáng/tối" aria-label="Chuyển giao diện sáng tối">☼</button><button id="libraryBtn" class="header-pill">▣ &nbsp; Tủ sách</button><button id="accountBtn" class="profile" title="Đăng nhập / Đồng bộ cloud" aria-label="Tài khoản và đồng bộ cloud">☁</button></div>
  </div>
 </header>
-<div class="demo-ribbon">My Books Player v0.8 · Sao lưu, khôi phục và kiểm tra v1 · Chờ nghiệm thu.</div>
+<div class="demo-ribbon">My Books Player v0.9 · Tích hợp bộ giọng Nghe Epub qua dịch vụ TTS riêng.</div>
 <section class="hero" aria-label="Sách nổi bật">
  <div class="shell hero-inner">
   <div><span class="eyebrow"><span class="dot"></span> ĐỀ XUẤT HÔM NAY · SÁCH MẪU</span><h1 id="heroTitle">Đường Về Qua Rừng Sao</h1><div class="author">✦ Tác giả: <strong id="heroAuthor">Phi Lam</strong></div><p class="hero-description" id="heroDescription">Một cuốn sách cũ dẫn người lữ khách đi qua những miền ký ức, nơi mỗi ánh sao đều lưu giữ một lời hứa chưa thực hiện.</p><div class="row-actions"><button id="heroRead" class="primary">Đọc ngay &nbsp; →</button><button id="heroListen" class="ghost">♫ &nbsp; Thử audio</button></div></div>
@@ -322,7 +322,8 @@ window.addEventListener("pagehide",function(){stopSpeech();});
 <script defer src="./book-parser.js?v=0.4.0"></script>
 <script defer src="./book-library.js?v=0.5.0"></script>
 <script defer src="./reader-bookmarks.js?v=0.5.0"></script>
-<script defer src="./reader-audio.js?v=0.6.0"></script>
+<script defer src="./nghe-epub-tts.js?v=0.9.0"></script>
+<script defer src="./reader-audio.js?v=0.9.0"></script>
 <script defer src="./reader-offline.js?v=0.7.0"></script>
 <script defer src="./backup.js?v=0.8.0"></script>
 </body>

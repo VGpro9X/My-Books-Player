@@ -1,32 +1,78 @@
-# Chuẩn nhận giọng TTS sau này
+# Tích hợp giọng Nghe Epub
 
-Chỉ cần cung cấp **nguyên bộ giọng hoặc tài liệu kỹ thuật thực tế**; không cần tự chuyển sang một định dạng cụ thể. Trình duyệt/GitHub Pages không tự chạy mọi loại mô hình giọng.
+## Trạng thái v0.9
 
-## Nếu cung cấp API TTS
+Frontend đã tích hợp catalog **10 gói / 97 speaker** và adapter `ngheEpub` trong
+Reader. Người dùng có thể nhập endpoint HTTPS, kiểm tra kết nối, chọn
+`voice_id`/`speaker_id`/tốc độ, tạo WAV cho phần còn lại của chương và phát bằng
+HTML Audio + Media Session.
 
-- HTTPS endpoint, method, kiểu xác thực (không đưa khóa API vào repo public).
-- Đầu vào: text UTF-8 và tùy chọn voice_id, language=vi-VN, speed.
-- Đầu ra: audio MP3 hoặc WAV hoặc OGG/Opus tùy trình duyệt hỗ trợ.
-- Nếu có: JSON thời gian theo câu/từ để đồng bộ highlight.
-- Ví dụ request/response và giới hạn ký tự/kích thước.
+Model không chạy trực tiếp trên GitHub Pages. Bộ runtime hiện có là thư viện native
+Android ARM64 và harness còn phụ thuộc lớp JNI của ứng dụng nguồn. Vì vậy repo public
+không chứa `.enc`, model NCNN, thư viện `.so`, khóa giải mã hoặc API key.
 
-## Nếu cung cấp mô hình TTS
+## Contract backend bắt buộc
 
-Gửi nguyên bộ file gốc (ví dụ ONNX + config JSON, hoặc PyTorch safetensors/pth + config/tokenizer/vocoder), code inference nếu có, và phụ thuộc/hướng dẫn chạy. Không cần tự chuyển định dạng. Mô hình có thể cần một backend riêng và tài nguyên tính toán.
+Base URL người dùng nhập phải kết thúc bằng `/api/tts`, ví dụ:
 
-## Nếu cung cấp file âm thanh
+```text
+https://tts.example.com/api/tts
+```
 
-MP3/AAC(M4A)/WAV/Opus được hỗ trợ tùy browser. File âm thanh có sẵn có thể phát ngay nhưng **không phải mô hình TTS có thể đọc văn bản tùy ý**.
+### Danh sách giọng
 
-## Giao diện tích hợp dự kiến
+```http
+GET /api/tts/voices
+Accept: application/json
+```
 
-Adapter sẽ nhận văn bản/voice_id/speed và trả về (1) audioUrl hoặc audioBlob, (2) duration, (3) optional array of {startMs,endMs,textPosition}. Cách tạo audio và hosting được triển khai khi biết bộ giọng thực tế.
+Response phải là một object có mảng `voices` hoặc trực tiếp là một mảng. Frontend
+dùng request này để kiểm tra endpoint; catalog hiển thị được cung cấp sẵn trong
+`nghe-epub-voices.json`.
 
-**Chưa tích hợp bất kỳ giọng tùy chỉnh nào trong v0.1.**
+### Sinh audio
 
+```http
+POST /api/tts/synthesize
+Content-Type: application/json
+Accept: audio/wav
+```
 
-## v0.6 — Bộ kết nối đang dùng
-- `browserSpeech`: TTS tiếng Việt miễn phí qua Web Speech API trong Chrome. Chỉ đọc văn bản trực tiếp, không tạo MP3, không cam kết chạy nền.
-- `fileAudio`: HTML Audio với Media Session, file MP3/WAV/M4A chọn từ máy, không gửi lên cloud.
-- Giọng TTS do người dùng cung cấp sau này có thể được nối bằng adapter chuyển văn bản UTF-8 thành file/stream audio, và có thể trả `cues` (startMs,endMs,paragraph) để tô sáng đúng đoạn; không yêu cầu định dạng giọng mới ngay lúc này.
-- JSON ví dụ: `{ "chapter": 1, "cues": [{ "startMs": 0, "endMs": 2500, "paragraph": 0 }] }`.
+```json
+{
+  "text": "Nội dung cần đọc",
+  "voice_id": "nghe-epub:12",
+  "speaker_id": 6,
+  "speed": 1.2
+}
+```
+
+Response thành công là `audio/wav` (khuyến nghị mono, PCM 16-bit, 24 kHz). Frontend
+chấp nhận tối đa 150 MB và gửi tối đa 50.000 ký tự trong một lần tạo.
+
+Backend phải bật CORS cho origin GitHub Pages:
+
+```text
+https://vgpro9x.github.io
+```
+
+Không yêu cầu người dùng nhập token vào website public. Nếu cần bảo vệ dịch vụ, nên
+dùng reverse proxy, phiên đăng nhập riêng hoặc allowlist phù hợp; không nhúng secret
+vào JavaScript.
+
+## Quyền riêng tư và vận hành
+
+- Nội dung từ đoạn đang đọc đến hết chương được gửi tới endpoint khi người dùng nhấn
+  **Tạo audio**. Không có request TTS nền hoặc tự động.
+- Endpoint và lựa chọn giọng lưu trong `localStorage`; audio sinh ra chỉ tồn tại dưới
+  dạng Blob của phiên đọc, không upload Supabase và không nằm trong ZIP backup.
+- HTTPS là bắt buộc khi chạy từ GitHub Pages. HTTP chỉ được chấp nhận trên localhost
+  khi phát triển cục bộ.
+- Phát một WAV dài qua Media Session có khả năng tiếp tục khi khóa màn hình tốt hơn
+  Web Speech API, nhưng Android vẫn có thể dừng Chrome để tiết kiệm pin.
+
+## Các adapter hiện có
+
+- `browserSpeech`: Web Speech API của Chrome/Android.
+- `ngheEpub`: gọi dịch vụ HTTPS và nhận audio thật.
+- `fileAudio`: phát MP3/WAV/M4A người dùng chọn từ máy.

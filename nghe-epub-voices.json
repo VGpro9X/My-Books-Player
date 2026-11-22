@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "nghe-epub-local-voices",
+  "source": { "app": "Nghe Epub", "package": "com.pipodev.ngheepub", "version": "2.1.6" },
+  "counts": { "voiceEntries": 10, "speakerProfiles": 97, "northEntries": 6, "southEntries": 4 },
+  "voices": [
+    {
+      "voiceId": "nghe-epub:1", "displayName": "VN_NORTH", "region": "north", "premium": false,
+      "speakerCount": 30,
+      "speakerNames": [
+        "VN_NORTH - Swan (F)", "VN_NORTH - Lion (M)", "VN_NORTH - Butterfly (F)", "VN_NORTH - Tiger (M)",
+        "VN_NORTH - Eagle (M)", "VN_NORTH - Wolf (M)", "VN_NORTH - Stallion (M)", "VN_NORTH - Bull (M)",
+        "VN_NORTH - Grizzly (M)", "VN_NORTH - Rhino (M)", "VN_NORTH - Phoenix (F)", "VN_NORTH - Cat (F)",
+        "VN_NORTH - Gorilla (M)", "VN_NORTH - Doe (F)", "VN_NORTH - Peacock (F)", "VN_NORTH - Mammoth (M)",
+        "VN_NORTH - Dolphin (F)", "VN_NORTH - Panther (M)", "VN_NORTH - Bee (F)", "VN_NORTH - Fox (F)",
+        "VN_NORTH - Owl (F)", "VN_NORTH - Falcon (M)", "VN_NORTH - Dove (F)", "VN_NORTH - Jaguar (M)",
+        "VN_NORTH - Dragonfly (F)", "VN_NORTH - Lioness (F)", "VN_NORTH - Shark (M)", "VN_NORTH - Tigress (F)",
+        "VN_NORTH - Cobra (M)", "VN_NORTH - Dragon (M)"
+      ]
+    },
+    {
+      "voiceId": "nghe-epub:3", "displayName": "VN_SOUTH", "region": "south", "premium": false,
+      "speakerCount": 30,
+      "speakerNames": [
+        "VN_SOUTH - Lion (M)", "VN_SOUTH - Tiger (M)", "VN_SOUTH - Swan (F)", "VN_SOUTH - Eagle (M)",
+        "VN_SOUTH - Wolf (M)", "VN_SOUTH - Stallion (M)", "VN_SOUTH - Bull (M)", "VN_SOUTH - Grizzly (M)",
+        "VN_SOUTH - Butterfly (F)", "VN_SOUTH - Rhino (M)", "VN_SOUTH - Phoenix (F)", "VN_SOUTH - Cat (F)",
+        "VN_SOUTH - Doe (F)", "VN_SOUTH - Gorilla (M)", "VN_SOUTH - Mammoth (M)", "VN_SOUTH - Panther (M)",
+        "VN_SOUTH - Peacock (F)", "VN_SOUTH - Dolphin (F)", "VN_SOUTH - Bee (F)", "VN_SOUTH - Falcon (M)",
+        "VN_SOUTH - Fox (F)", "VN_SOUTH - Owl (F)", "VN_SOUTH - Jaguar (M)", "VN_SOUTH - Dove (F)",
+        "VN_SOUTH - Shark (M)", "VN_SOUTH - Cobra (M)", "VN_SOUTH - Dragonfly (F)", "VN_SOUTH - Lioness (F)",
+        "VN_SOUTH - Tigress (F)", "VN_SOUTH - Dragon (M)"
+      ]
+    },
+    {
+      "voiceId": "nghe-epub:5", "displayName": "VI_SOUTH_12SPK", "region": "south", "premium": false,
+      "speakerCount": 12,
+      "speakerNames": [
+        "VI_SOUTH_12SPK - Lion (M)", "VI_SOUTH_12SPK - Swan (F)", "VI_SOUTH_12SPK - Butterfly (F)",
+        "VI_SOUTH_12SPK - Tiger (M)", "VI_SOUTH_12SPK - Eagle (M)", "VI_SOUTH_12SPK - Wolf (M)",
+        "VI_SOUTH_12SPK - Stallion (M)", "VI_SOUTH_12SPK - Bull (M)", "VI_SOUTH_12SPK - Phoenix (F)",
+        "VI_SOUTH_12SPK - Cat (F)", "VI_SOUTH_12SPK - Doe (F)", "VI_SOUTH_12SPK - Peacock (F)"
+      ]
+    },
+    {
+      "voiceId": "nghe-epub:6", "displayName": "VI_NORTH_12SPK", "region": "north", "premium": false,
+      "speakerCount": 12,
+      "speakerNames": [
+        "VI_NORTH_12_SPK - Swan (F)", "VI_NORTH_12_SPK - Lion (M)", "VI_NORTH_12_SPK - Tiger (M)",
+        "VI_NORTH_12_SPK - Butterfly (F)", "VI_NORTH_12_SPK - Eagle (M)", "VI_NORTH_12_SPK - Wolf (M)",
+        "VI_NORTH_12_SPK - Phoenix (F)", "VI_NORTH_12_SPK - Cat (F)", "VI_NORTH_12_SPK - Doe (F)",
+        "VI_NORTH_12_SPK - Peacock (F)", "VI_NORTH_12_SPK - Stallion (M)", "VI_NORTH_12_SPK - Bull (M)"
+      ]
+    },
+    { "voiceId": "nghe-epub:7", "displayName": "MC Trần Vân", "region": "south", "premium": true, "speakerCount": 1, "speakerNames": ["MC Trần Vân"] },
+    { "voiceId": "nghe-epub:8", "displayName": "Ngọc Huyền", "region": "north", "premium": true, "speakerCount": 1, "speakerNames": ["Ngọc Huyền"] },
+    { "voiceId": "nghe-epub:9", "displayName": "MC Nguyễn Ngọc Ngạn", "region": "north", "premium": true, "speakerCount": 1, "speakerNames": ["MC Nguyễn Ngọc Ngạn"] },
+    { "voiceId": "nghe-epub:10", "displayName": "MC Việt Thảo", "region": "south", "premium": true, "speakerCount": 1, "speakerNames": ["MC Việt Thảo"] },
+    { "voiceId": "nghe-epub:11", "displayName": "Khoai Tây", "region": "north", "premium": true, "speakerCount": 1, "speakerNames": ["Khoai Tây"] },
+    {
+      "voiceId": "nghe-epub:12", "displayName": "PRE_01_8SPK", "region": "north", "premium": true,
+      "speakerCount": 8,
+      "speakerNames": ["(M) Bác Ngạn", "(F) No-Name", "(F) Ngọc Huyền", "(M) MinhPhong88pro", "(F) Nguyệt Nga", "(M) Hải Truyện", "(M) Phố Minh Đức", "(F) Tuệ Giác"]
+    }
+  ]
+}

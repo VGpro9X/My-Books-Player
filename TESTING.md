@@ -1,6 +1,17 @@
-# My Books Player v0.8 — Kiểm thử sao lưu, hiệu năng và hồi quy
+# My Books Player v0.9 — Kiểm thử Nghe Epub và hồi quy
 
-Website: https://vgpro9x.github.io/My-Books-Player/?v=0.8.0
+Website sau khi phát hành: https://vgpro9x.github.io/My-Books-Player/?v=0.9.0
+
+## Kiểm thử v0.9 sau khi có backend
+
+1. Mở một sách/chương, chọn **♫ → Nghe Epub**.
+2. Nhập base URL HTTPS kết thúc bằng `/api/tts`, nhấn **Kiểm tra kết nối**.
+3. Chọn gói giọng và speaker; xác nhận đủ 10 gói và tên speaker đúng catalog.
+4. Nhấn **Tạo audio phần còn lại của chương** và xác nhận trạng thái cho biết số ký tự đang gửi.
+5. Phát WAV, thử play/pause/tua trên Reader và màn hình khóa Android.
+6. Chuyển chương trong lúc tạo/phát; request cũ phải bị hủy và audio cũ được dọn.
+7. Tải lại trang; endpoint/lựa chọn còn lưu nhưng audio Blob cũ không còn.
+8. Xác nhận backend chỉ nhận nội dung sau thao tác tạo audio và repo/browser không chứa API key.
 
 ## Checklist kiểm tra Android
 1. Đăng nhập tài khoản Supabase cũ; mở biểu tượng ☁ → nhấn **Sao lưu / Khôi phục**.
@@ -19,6 +30,6 @@ Website: https://vgpro9x.github.io/My-Books-Player/?v=0.8.0
 - ZIP khôi phục luôn tạo thêm cuốn sách, có thể trùng tên. Hãy khôi phục bản thử ít sách trước khi thử toàn bộ.
 - Khôi phục gián đoạn có thể để lại các cuốn **đã nhập thành công** trước khi lỗi; không xóa cuốn đang có. Ghi nhận số cuốn đã thêm trước khi lỗi.
 - Trình duyệt có thể thiếu bộ nhớ khi tải ZIP gần giới hạn (tổng sách 160 MB, ZIP 190 MB).
-- Giọng do bạn cung cấp và sinh audio tự động từ TXT/EPUB để nghe liên tục khi khóa màn hình chưa được tích hợp. Không đánh dấu chức năng đó là đạt.
+- Client Nghe Epub đã tích hợp; không đánh dấu end-to-end là đạt cho tới khi endpoint Piper/NCNN thật sinh WAV thành công và được thử trên Android.
 - **Đã nghiệm thu:** người dùng xác nhận v0.8 đạt **8/8** vào **22/11/2026**. Các bước 01–08 được chốt trong phạm vi đã triển khai.
-- Nếu cần v1 đáp ứng đủ mục tiêu ban đầu, vẫn cần tích hợp giọng TTS người dùng cung cấp và sinh audio tự động để nghe liên tục khi khóa màn hình.
+- Để đạt v1 vẫn cần triển khai endpoint HTTPS, xác nhận CORS/quyền sử dụng model và nghiệm thu phát WAV khi khóa màn hình.
